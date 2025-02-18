@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+
 *,
 *::after,
 *::before {
@@ -7,12 +9,38 @@
   font-size: inherit;
   font-weight: inherit;
   text-decoration: none;
+  font-family: "Roboto", serif;
+  color: inherit;
 }
 
 :root{
+  /* Couleurs principales */
   --white-color : #F6F7F2;
   --black-color : #16161D;
   --carmine-color : #931621;
   --fire-brick-color : #AB3428;
   --pumpkin-color : #FF8C42;
+
+  /* Couleurs secondaires */
+  --easy-color : #59FF00;
+  --moderate-color : #FFA600;
+  --html-color : #E42404;
+  --css-color : #115C95;
+  --js-color : #F4E41B;
+
 }
+
+header, footer{
+  min-height: 50px;
+  height: 10vh;
+  width: 100vw;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center ;
+}
+
+h1, h2, h3, h4, h5, h6, .logo-container a{
+  font-family: "Bebas Neue", serif;
+}
+

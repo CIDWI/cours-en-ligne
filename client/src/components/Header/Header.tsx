@@ -1,4 +1,6 @@
 import { Link } from "react-router-dom"
+import './Header.css'
+import ProfilePicture from "../../assets/thispersondoesnotexist.jpg"
 
 export const Header = () => {
 
@@ -6,21 +8,21 @@ export const Header = () => {
         <header>
             <div className="theme-grade-container">
                 <div className="theme-container">
-                    {/* Ajouter le bouton pour thèmes sombre et clair */}
+                    Bouton thème
                 </div>
                 <div className="grade-container">
-                    {/* Ajouter la classe ou le rôle de l'utilisateur */}
+                    Classe
                 </div>
             </div>
             <div className="logo-container">
-                <Link to='/'>Logo</Link>
+                <Link to='/'>CIDWI</Link>
             </div>
             <div className="user-identity-container">
                 <div className="user-name-container">
-                    {/* Nom et prénom de l'utilisateur */}
+                    NOM Prénom
                 </div>
                 <div className="user-photo-container">
-                    <img src="" alt="Photo de profil"/>
+                    <Link to='/'><img src={ProfilePicture} alt="Photo de profil"/></Link>
                 </div>
             </div>   
         </header>

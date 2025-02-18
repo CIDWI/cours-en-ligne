@@ -1,0 +1,23 @@
+.logo-container a{
+    font-size: 2.5rem;
+    letter-spacing: 5px;
+}
+
+.theme-grade-container, .user-identity-container{
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+}
+
+.user-photo-container{
+    width: 50px;
+    height: 50px;
+}
+
+.user-photo-container img{
+    width: 100%;
+}
+
+.user-photo-container, .user-identity-container img{
+    border-radius: 50%;
+}
