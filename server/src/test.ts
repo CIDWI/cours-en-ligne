@@ -1,46 +1,136 @@
 import { AppDataSource } from "./dataSource";
-/*import { Animal } from './modules/animal/animalEntity'
-import { animalRepository } from './modules/animal/animalRepository'
-import { Client } from './modules/user/client/clientEntity'
-import { clientRepository } from './modules/user/client/clientRepository'
-import { Company } from './modules/user/company/companyEntity'
-import { companyRepository } from './modules/user/company/companyRepository'
+import {User} from "./modules/user/userEntity";
+import {userRepository} from "./modules/user/userRepository";
+import {Chapter} from "./modules/chapter/chapterEntity";
+import {Lesson} from "./modules/lesson/lessonEntity";
+import {lessonRepository} from "./modules/lesson/lessonRepository";
+import {Exercise} from "./modules/exercise/exerciseEntity";
+import {Advancement} from "./modules/advancement/advancementEntity";
+import {exerciseRepository} from "./modules/exercise/exerciseRepository";
+import {chapterRepository} from "./modules/chapter/chapterRepository";
+import {advancementRepository} from "./modules/advancement/advancementRepository";
 
-import { User } from './modules/user/userEntity'
-import { userRepository } from './modules/user/userRepository'
 
-const test = async () => {
-  await AppDataSource.initialize()
-  const animal = new Animal()
-  animal.name = 'choupies'
-  animal.spicies = 'dog'
-
-  await animalRepository.save(animal)
-
-  const user = new User()
-  user.login = 'plop5'
-  user.password = 'azerty'
-  user.animal = animal
-
-  await userRepository.save(user)
-
-  const client = new Client()
-  client.login = 'plop6'
-  client.password = 'aertyop'
-  client.adress = "23 rue pérotin" 
-
-  await clientRepository.save(client)
-
-  const company = new Company()
-  company.login = 'plop7'
-  company.password = 'azertyiop'
-  company.companyName = 'Alten'
-
-  await companyRepository.save(company)
-}
-
-test() */
 const test = async () => {
   await AppDataSource.initialize();
+
+
+  //jeu d'essaie
+
+  //init user
+  const user1 = new User()
+  user1.login = 'user1'
+  user1.password = 'azerty'
+  user1.role = 'user';
+
+  await userRepository.save(user1)
+
+  const user2= new User()
+  user2.login = 'user2'
+  user2.password = 'azerty'
+  user2.role = 'user';
+
+  await userRepository.save(user2)
+
+  const user3 = new User()
+  user3.login = 'admin'
+  user3.password = 'azerty'
+  user3.role = 'admin';
+
+  await userRepository.save(user3)
+
+
+
+   //init Chapitre
+  const chapter1 = new Chapter()
+  chapter1.title = 'Les bases HTML'
+  await chapterRepository.save(chapter1)
+
+  const chapter2 = new Chapter()
+  chapter2.title = 'Ajouts de CSS'
+
+  await chapterRepository.save(chapter2)
+
+  const chapter3 = new Chapter()
+  chapter3.title = 'Dynamisation avec JS'
+
+  await chapterRepository.save(chapter3)
+
+
+
+  //init lesson
+  const lesson1 = new Lesson()
+  lesson1.title = 'Lesson 1'
+  lesson1.level = '1'
+  lesson1.languages = 'CSS'
+  lesson1.chapter = chapter2;
+  lesson1.link = 'https://www.youtube.com/watch?v=GBIIQ0kP15E'
+
+
+  await lessonRepository.save(lesson1)
+
+  const lesson2 = new Lesson()
+  lesson2.title = 'Lesson 2'
+  lesson2.level = '2'
+  lesson2.languages = 'CSS'
+  lesson2.chapter = chapter2;
+  lesson2.link = 'https://www.youtube.com/watch?v=GBIIQ0kP15E'
+
+
+  await lessonRepository.save(lesson2)
+
+  const lesson3 = new Lesson()
+  lesson3.title = 'Lesson 3'
+  lesson3.level = '3'
+  lesson3.languages = 'JS'
+  lesson3.chapter = chapter1;
+  lesson3.link = 'https://www.youtube.com/watch?v=GBIIQ0kP15E'
+
+
+  await lessonRepository.save(lesson3)
+
+
+
+
+  //init exercice
+  const exercise1 = new Exercise()
+  exercise1.title = 'Exercise 1'
+  exercise1.content = 'reproduisez cette image'
+  exercise1.imageLink = '/image/img.png'
+  exercise1.lesson = lesson1
+
+  await exerciseRepository.save(exercise1)
+
+  const exercise2 = new Exercise()
+  exercise2.title = 'Exercise 2'
+  exercise2.content = 'reproduisez cette image'
+  exercise2.imageLink = '/image/img.png'
+  exercise2.lesson = lesson2
+
+  await exerciseRepository.save(exercise2)
+
+  const exercise3 = new Exercise()
+  exercise3.title = 'Exercise 3'
+  exercise3.content = 'reproduisez cette vidéo'
+  exercise3.imageLink = '/image/img.png'
+  exercise3.lesson = lesson3
+
+  await exerciseRepository.save(exercise3)
+
+
+
+  //init avancement
+  const advancement1 = new Advancement()
+  advancement1.isDone = false
+  advancement1.lesson = lesson1
+  advancement1.user = user2
+  await advancementRepository.save(advancement1)
+
+  const advancement2 = new Advancement()
+  advancement2.isDone = true
+  advancement2.lesson = lesson2
+  advancement2.user = user1
+  await advancementRepository.save(advancement2)
+
 };
 test();

@@ -30,7 +30,7 @@ export class Lesson {
   languages: string;
 
   @ManyToOne(() => Chapter, (chapter) => chapter.lessons)
-  chapter = Chapter;
+  chapter: Chapter;
 
   @OneToMany(() => Exercise, (exercise) => exercise.lesson)
   exercises: Exercise[];
