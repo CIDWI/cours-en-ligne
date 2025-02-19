@@ -25,18 +25,6 @@
     margin-bottom: 1rem;
 }
 
-.more-resources-websites img:hover{
-    box-shadow: 0 0 10px var(--text-color);
-    scale: 1.1;
-    transition: 200ms;
-}
-
-.more-resources-websites img:active{
-    scale: 0.8;
-    box-shadow: 0 0 20px var(--carmine-color);
-    transition: 200ms;
-}
-
 .more-resources-websites h3{
     font-size: 1.7rem;
 }

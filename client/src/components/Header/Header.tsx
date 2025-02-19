@@ -20,7 +20,7 @@ export const Header = () => {
     }, []);
 
     return (
-        <header ref={navbarRef} className={`navbar ${scrolled ? "scrolled" : ""} ${darkMode === true ? "dark" : ""}`}>
+        <header ref={navbarRef} className={`navbar ${scrolled ? "scrolled" : ""} ${darkMode === true ? "dark" : "   "}`}>
             <div className="theme-grade-container">
                 <div className="theme-container">
                     <button onClick={toggleTheme} className="px-4 py-2 border rounded">

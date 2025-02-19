@@ -10,12 +10,6 @@
     margin-bottom: 2rem;
 }
 
-.course-pill-container:hover{
-    box-shadow: 10px 10px 0px var(--carmine-color);
-    transition: 150ms;
-    transform: translate(-5px, -5px);
-}
-
 .course-pill-informations{
     flex: 5;
     display: flex;
