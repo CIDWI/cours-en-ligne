@@ -7,9 +7,9 @@ export const Page = ({ children }: PropsWithChildren) => {
   return (
     <>
       <Header />
-        <div className="children-container">
-          {children}
-        </div>
+      <div className="children-container">
+        {children}
+      </div>
       <Footer />
     </>
   )

@@ -23,7 +23,18 @@
     width: 100%;
     border-radius: 50%;
     margin-bottom: 1rem;
-    box-shadow: 5px 5px var(--text-color);
+}
+
+.more-resources-websites img:hover{
+    box-shadow: 0 0 10px var(--text-color);
+    scale: 1.1;
+    transition: 200ms;
+}
+
+.more-resources-websites img:active{
+    scale: 0.8;
+    box-shadow: 0 0 20px var(--carmine-color);
+    transition: 200ms;
 }
 
 .more-resources-websites h3{
