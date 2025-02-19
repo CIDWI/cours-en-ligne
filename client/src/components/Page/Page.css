@@ -1,6 +1,6 @@
 .children-container{
     width: 100vw;
-    height: 80vh;
+    min-height: 80vh;
     padding: 30px 20px;
     display: flex;
     justify-content: center;

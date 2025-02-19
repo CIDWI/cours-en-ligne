@@ -15,8 +15,9 @@
 
 :root{
   /* Couleurs principales */
-  --white-color : #F6F7F2;
-  --black-color : #16161D;
+  --background-color : #F6F7F2;
+  --text-color : #16161D;
+  --pills-background-color : #ffffff;
   --carmine-color : #931621;
   --fire-brick-color : #AB3428;
   --pumpkin-color : #FF8C42;
@@ -30,14 +31,25 @@
 
 }
 
+.dark{
+  --background-color : #16161D;
+  --text-color : #F6F7F2;
+  --pills-background-color : #232329;
+}
+
+body{
+  background-color: var(--background-color);
+  color: var(--text-color);
+}
+
 header, footer{
   min-height: 50px;
   height: 10vh;
   width: 100vw;
-  padding: 0 20px;
+  padding: 0 30px;
   display: flex;
   justify-content: space-between;
-  align-items: center ;
+  align-items: center;
 }
 
 h1, h2, h3, h4, h5, h6, .logo-container a{

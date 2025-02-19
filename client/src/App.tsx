@@ -1,14 +1,17 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
-import { Home } from './pages/Home/Home'
+import Home from './pages/Home/Home'
+import { ThemeProvider } from './ThemeContext'
 
-function App() {
+export const App = () => {
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Home/>}/>
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Home/>}/>
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   )
 }
 

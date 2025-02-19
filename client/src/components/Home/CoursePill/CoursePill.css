@@ -2,11 +2,12 @@
     width: 35vw;
     border-radius: 20px;
     box-shadow: 6px 6px 0px var(--carmine-color);
-    background-color: var(--white-color);
+    background-color: var(--pills-background-color);
     padding: 15px 20px;
     display: flex;
     gap: 2rem;
     font-weight: bold;
+    margin: 0 auto;
     margin-bottom: 2rem;
 }
 

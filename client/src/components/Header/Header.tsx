@@ -1,14 +1,19 @@
 import { Link } from "react-router-dom"
+import { useTheme } from "../../ThemeContext";
 import './Header.css'
 import ProfilePicture from "../../assets/thispersondoesnotexist.jpg"
 
 export const Header = () => {
 
+    const { darkMode, toggleTheme } = useTheme();
+
     return (
         <header>
             <div className="theme-grade-container">
                 <div className="theme-container">
-                    Bouton thème
+                    <button onClick={toggleTheme} className="px-4 py-2 border rounded">
+                        {darkMode ? "🌙" : "☀️"}
+                    </button>
                 </div>
                 <div className="grade-container">
                     Classe
