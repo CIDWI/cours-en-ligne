@@ -10,6 +10,7 @@ import {
   TableInheritance,
 } from "typeorm";
 import { Lesson } from "../lesson/lessonEntity";
+import {Course} from "../cours/courseEntity";
 
 @Entity()
 export class Chapter {
@@ -21,4 +22,6 @@ export class Chapter {
   title: string;
   @OneToMany(() => Lesson, (lesson) => lesson.chapter)
   lessons: Lesson[];
+  @ManyToOne(() => Course, (course) => course.chapters)
+  course: Course;
 }

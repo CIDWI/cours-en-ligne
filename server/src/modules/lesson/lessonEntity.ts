@@ -32,6 +32,6 @@ export class Lesson {
   @ManyToOne(() => Chapter, (chapter) => chapter.lessons)
   chapter: Chapter;
 
-  @OneToMany(() => Exercise, (exercise) => exercise.lesson)
-  exercises: Exercise[];
+  @OneToOne(() => Exercise, (exercise) => exercise.lesson)
+  exercise: Exercise;
 }

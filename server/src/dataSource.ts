@@ -4,6 +4,7 @@ import { Lesson } from './modules/lesson/lessonEntity'
 import { Chapter } from './modules/chapter/chapterEntity'
 import { Exercise } from './modules/exercise/exerciseEntity'
 import { Advancement } from './modules/advancement/advancementEntity'
+import {Course} from "./modules/cours/courseEntity";
 
 export const AppDataSource = new DataSource({
   type: 'mysql',
@@ -12,7 +13,7 @@ export const AppDataSource = new DataSource({
   username: 'root',
   password: 'root',
   database: 'app_db',
-  entities: [User,Lesson, Chapter, Exercise, Advancement],
+  entities: [User,Lesson, Chapter, Exercise, Advancement,Course],
   synchronize: true,
   logging: false,
 })

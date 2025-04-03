@@ -9,6 +9,8 @@ import {Advancement} from "./modules/advancement/advancementEntity";
 import {exerciseRepository} from "./modules/exercise/exerciseRepository";
 import {chapterRepository} from "./modules/chapter/chapterRepository";
 import {advancementRepository} from "./modules/advancement/advancementRepository";
+import {Course} from "./modules/cours/courseEntity";
+import {courseRepository} from "./modules/cours/courseRepository";
 
 
 const test = async () => {
@@ -16,6 +18,8 @@ const test = async () => {
 
 
   //jeu d'essaie
+
+
 
   //init user
   const user1 = new User()
@@ -39,20 +43,32 @@ const test = async () => {
 
   await userRepository.save(user3)
 
+//init course
+  const course1 = new Course()
+  course1.title = "Course 1";
 
+  await courseRepository.save(course1);
+
+  const course2 = new Course()
+  course2.title = "Course 2";
+
+  await courseRepository.save(course2);
 
    //init Chapitre
   const chapter1 = new Chapter()
   chapter1.title = 'Les bases HTML'
+  chapter1.course = course1;
   await chapterRepository.save(chapter1)
 
   const chapter2 = new Chapter()
   chapter2.title = 'Ajouts de CSS'
+  chapter1.course = course1;
 
   await chapterRepository.save(chapter2)
 
   const chapter3 = new Chapter()
   chapter3.title = 'Dynamisation avec JS'
+  chapter3.course = course2;
 
   await chapterRepository.save(chapter3)
 

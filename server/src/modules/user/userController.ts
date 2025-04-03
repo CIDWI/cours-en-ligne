@@ -12,7 +12,7 @@ import {
 export const userController = Router()
 
 const validator = createValidator()
-// plop
+// middleware
 userController.use(
   expressjwt({
     secret: process.env.JWT_SECRET!,
@@ -21,41 +21,41 @@ userController.use(
 )
 
 userController.get('/', async (req: JWTRequest, res) => {
-  const role = req.auth?.role
-  if (role == 'admin') {
-    res.send(await userRepository.find())
-  } else {
-    res.sendStatus(403)
-  }
+    const role = req.auth?.role
+    if (role == 'admin') {
+        res.send(await userRepository.find())
+    } else {
+        res.sendStatus(403)
+    }
 })
 
 const createUserSchema = Joi.object({
-  login: Joi.string().required(),
-  password: Joi.string().required(),
-  role: Joi.string().optional(),
+    login: Joi.string().required(),
+    password: Joi.string().required(),
+    role: Joi.string().optional(),
 })
 userController.post(
-  '/',
-  validator.body(createUserSchema),
-  async (req, res) => {
-    try {
-      res.send(
-        await userRepository.save({
-          login: req.body.login,
-          password: req.body.password,
-          role: req.body.role ?? 'user',
-        }),
-      )
-    } catch (error: any) {
-      res.status(400).send({
-        error: error.message,
-        detail: error.detail,
-      })
-    }
-  },
+    '/',
+    validator.body(createUserSchema),
+    async (req, res) => {
+        try {
+            res.send(
+                await userRepository.save({
+                    login: req.body.login,
+                    password: req.body.password,
+                    role: req.body.role ?? 'user',
+                }),
+            )
+        } catch (error: any) {
+            res.status(400).send({
+                error: error.message,
+                detail: error.detail,
+            })
+        }
+    },
 )
 
-const getUserSchema = Joi.object({
+const  getUserSchema = Joi.object({
   id: Joi.number().required(),
 })
 userController.get(

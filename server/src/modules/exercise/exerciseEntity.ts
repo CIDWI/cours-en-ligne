@@ -24,7 +24,7 @@ export class Exercise {
   @Column("longtext")
   content: string;
   
-  @ManyToOne(() => Lesson, (lesson) => lesson.exercises)
+  @OneToOne(() => Lesson, (lesson) => lesson.exercise)
   lesson: Lesson;
 
 }
