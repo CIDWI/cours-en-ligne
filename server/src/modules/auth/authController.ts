@@ -33,7 +33,6 @@ authController.post(
                     .createHmac('sha256', storedSalt)
                     .update(req.body.password)
                     .digest('hex');
-
                 // Comparer le mot de passe haché avec celui stocké dans la base de données
                 if (hashedPasswordAttempt === user.password) {
                     // Créer le token JWT si les mots de passe correspondent

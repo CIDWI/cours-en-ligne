@@ -9,6 +9,7 @@ import {
   Request as JWTRequest,
 } from 'express-jwt'
 import crypto from "crypto";
+import {advancementRepository} from "../advancement/advancementRepository";
 
 export const userController = Router()
 
@@ -36,6 +37,7 @@ const createUserSchema = Joi.object({
     password: Joi.string().required(),
     role: Joi.string().optional(),
 })
+
 userController.post(
     '/',
     validator.body(createUserSchema),
@@ -86,4 +88,87 @@ userController.get(
       res.sendStatus(403)
     }
   },
-)
+);
+const updateUserSchema = Joi.object({
+    login: Joi.string().optional(),
+    password: Joi.string().optional(),
+})
+userController.put(
+    '/:id',
+    validator.params(getUserSchema),validator.body(updateUserSchema),
+    async (req: JWTRequest, res) => {
+
+
+        try {
+            const id = Number(req.params.id)
+            if (req.auth?.role === 'admin') {
+
+                const userToUpdate = await userRepository.findOneBy({ id })
+                if (!userToUpdate) {
+                    throw {status: 404, message: 'User not found'};
+                }
+                if (!req.body.password && !req.body.login)
+                {
+                    throw {status: 400, message: 'missing information to modify'};
+                }
+                else {
+                    if (req.body.password) {
+                        const salt = process.env.SALT!
+                        userToUpdate.password = crypto
+                            .createHmac('sha256', salt)
+                            .update(req.body.password)
+                            .digest('hex')
+                    }
+                    if (req.body.login) {
+                        userToUpdate.login = req.body.login
+                    }
+                    const userToUpdateShow = userToUpdate;
+                    const updatedUser = await userRepository.update(req.params.id,{
+                        login: userToUpdate.login,
+                        password:userToUpdate.password,
+                    });
+                    res.send(userToUpdateShow);
+                }
+            }
+            else {
+                throw {status: 403, message: 'Forbidden'};
+            }
+        }
+        catch (error:any) {
+            res.status(error.status).send({error: error.message});
+        }
+    },
+);
+userController.delete(
+    '/:id',
+    validator.params(getUserSchema),
+    async (req: JWTRequest, res) => {
+        const id = Number(req.params.id)
+        try {
+            if (req.auth?.role === 'admin') {
+                const user = await userRepository.findOneBy({ id });
+                if (!user) {
+                    throw { status: 404, message: 'User not found' };
+                }
+
+                // Supprimer les avancements liés à l'utilisateur
+                await advancementRepository.delete({ user: { id } });
+
+                // Supprimer l'utilisateur
+                await userRepository.delete({ id });
+
+                res.sendStatus(204); // No Content
+            }
+            else {
+                throw {status: 403, message: 'Forbidden'};
+            }
+        }
+        catch (error:any) {
+            res.status(error.status).send({error: error.message});
+        }
+    },
+);
+
+
+
+

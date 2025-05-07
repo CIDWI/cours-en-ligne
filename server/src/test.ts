@@ -11,6 +11,9 @@ import {chapterRepository} from "./modules/chapter/chapterRepository";
 import {advancementRepository} from "./modules/advancement/advancementRepository";
 import {Course} from "./modules/cours/courseEntity";
 import {courseRepository} from "./modules/cours/courseRepository";
+import crypto from "crypto";
+import 'dotenv/config';
+
 
 
 const test = async () => {
@@ -18,27 +21,32 @@ const test = async () => {
 
 
   //jeu d'essaie
-
-
+  // pour le démarrer
+  //  npx ts-node src/test.ts
+  const salt = process.env.SALT!;
+  const hashedPassword = crypto
+      .createHmac('sha256', salt)
+      .update('azerty')
+      .digest('hex');
 
   //init user
   const user1 = new User()
   user1.login = 'user1'
-  user1.password = 'azerty'
+  user1.password = hashedPassword
   user1.role = 'user';
 
   await userRepository.save(user1)
 
   const user2= new User()
   user2.login = 'user2'
-  user2.password = 'azerty'
+  user2.password = hashedPassword
   user2.role = 'user';
 
   await userRepository.save(user2)
 
   const user3 = new User()
   user3.login = 'admin'
-  user3.password = 'azerty'
+  user3.password = hashedPassword
   user3.role = 'admin';
 
   await userRepository.save(user3)
