@@ -33,5 +33,6 @@ export class Lesson {
   chapter: Chapter;
 
   @OneToOne(() => Exercise, (exercise) => exercise.lesson)
+  @JoinColumn()
   exercise: Exercise;
 }
