@@ -22,6 +22,18 @@ userController.use(
     algorithms: ['HS256'],
   }),
 )
+const  getUserSchema = Joi.object({
+    id: Joi.number().required(),
+})
+const createUserSchema = Joi.object({
+    login: Joi.string().required(),
+    password: Joi.string().required(),
+    role: Joi.string().optional(),
+})
+const updateUserSchema = Joi.object({
+    login: Joi.string().optional(),
+    password: Joi.string().optional(),
+})
 
 userController.get('/', async (req: JWTRequest, res) => {
     const role = req.auth?.role
@@ -32,67 +44,62 @@ userController.get('/', async (req: JWTRequest, res) => {
     }
 })
 
-const createUserSchema = Joi.object({
-    login: Joi.string().required(),
-    password: Joi.string().required(),
-    role: Joi.string().optional(),
-})
-
 userController.post(
     '/',
     validator.body(createUserSchema),
-    async (req, res) => {
+    async (req: JWTRequest, res) => {
         try {
-            //céation du salt avec le.env
-            const salt = process.env.SALT!;
+            if (req.auth?.role === 'admin') {
+                //céation du salt avec le.env
+                const salt = process.env.SALT!;
 
-            // Hacher le mot de passe avec SHA-256 et ajouter le salt
-            const hashedPassword = crypto
-                .createHmac('sha256', salt)
-                .update(req.body.password)
-                .digest('hex');
+                // Hacher le mot de passe avec SHA-256 et ajouter le salt
+                const hashedPassword = crypto
+                    .createHmac('sha256', salt)
+                    .update(req.body.password)
+                    .digest('hex');
 
-            // Sauvegarder l'utilisateur avec le mot de passe haché et le salt
-            const savedUser = await userRepository.save({
-                login: req.body.login,
-                password: hashedPassword, // Utilise le mot de passe haché ici
-                role: req.body.role ?? 'user',
-            });
+                // Sauvegarder l'utilisateur avec le mot de passe haché et le salt
+                const savedUser = await userRepository.save({
+                    login: req.body.login,
+                    password: hashedPassword, // Utilise le mot de passe haché ici
+                    role: req.body.role ?? 'user',
+                });
 
-            // Envoie la réponse avec l'utilisateur sauvegardé
-            res.send(savedUser);
+                // Envoie la réponse avec l'utilisateur sauvegardé
+                res.send(savedUser);
+            }
+            else {
+                throw {status: 403, message: 'Forbidden'};
+            }
+
         } catch (error:any) {
-            res.status(400).send({
-                error: error.message,
-                detail: error.detail,
-            });
+            res.status(error.status).send({error: error.message});
         }
     }
 );
 
-const  getUserSchema = Joi.object({
-  id: Joi.number().required(),
-})
+
 userController.get(
   '/:id',
   validator.params(getUserSchema),
   async (req: JWTRequest, res) => {
     const id = Number(req.params.id)
     if (req.auth?.role === 'admin' || req.auth?.id === id) {
-      res.send(
-        await userRepository.findOneBy({
-          id,
-        }),
-      )
-    } else {
+        const  user  = await userRepository.findOneBy({id});
+        if (user) {
+            res.send(user);
+        }
+        else {
+            res.status(404).send({error: 'User not found'});
+        }
+    }
+    else {
       res.sendStatus(403)
     }
   },
 );
-const updateUserSchema = Joi.object({
-    login: Joi.string().optional(),
-    password: Joi.string().optional(),
-})
+
 userController.put(
     '/:id',
     validator.params(getUserSchema),validator.body(updateUserSchema),

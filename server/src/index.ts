@@ -2,6 +2,7 @@ import express from 'express'
 import { AppDataSource } from './dataSource'
 import { userController } from './modules/user/userController'
 import { authController } from './modules/auth/authController'
+import {courseController} from "./modules/cours/courseController";
 
 const app = express()
 
@@ -12,6 +13,7 @@ app.get('/', (req, res) => {
 
 app.use('/users', userController)
 app.use('/auth', authController)
+app.use('/course', courseController)
 
 const port = process.env.PORT
   ? Number(process.env.PORT)
