@@ -1,0 +1,12 @@
+.homepage-container{
+    display: flex;
+    flex-direction: column;
+    margin-top: 70px;
+}
+
+h1{
+    font-size: 3rem;
+    font-style: italic;
+    margin-bottom: 2rem;
+    text-align: center;
+}
