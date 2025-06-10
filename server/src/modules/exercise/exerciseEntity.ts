@@ -25,6 +25,7 @@ export class Exercise {
   content: string;
   
   @OneToOne(() => Lesson, (lesson) => lesson.exercise)
+  @JoinColumn()
   lesson: Lesson;
 
 }
