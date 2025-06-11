@@ -1,16 +1,16 @@
-import { PropsWithChildren } from "react";
 import { Header } from "../Header/Header"
 import { Footer } from "../Footer/Footer"
 import './Page.css'
 
-export const Page = ({ children }: PropsWithChildren) => {
-  return (
-    <>
-      <Header />
-      <div className="children-container">
-        {children}
-      </div>
-      <Footer />
-    </>
-  )
-}
+
+const Page: React.FC<{ children: React.ReactNode }> = ({ children }) => (
+  <>
+    <Header />
+    <main className="children-container">
+      {children}
+    </main>
+    <Footer />
+  </>
+)
+
+export default Page

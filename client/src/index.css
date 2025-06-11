@@ -17,10 +17,10 @@
   /* Couleurs principales */
   --background-color : #F6F7F2;
   --text-color : #16161D;
-  --pills-background-color : #ffffff;
   --purple-color : #54358d;
   --lavender-color : #b895e7;
   --footer-background-color: #272727;
+  --body-background: #cfd9dbb2;
 
   /* Couleurs secondaires */
   --easy-color : #59FF00;
@@ -31,9 +31,10 @@
 }
 
 .dark{
-  --background-color : #16161D;
+  --background-color : #0c0b0e;
   --text-color : #F6F7F2;
   --pills-background-color : #232329;
+  --body-background: #202020;
 }
 
 html{
@@ -65,20 +66,35 @@ html{
   background: linear-gradient(45deg, #9013fe, #4a90e2);
 }
 
-html{
-  background-color: red;
+body{
+  background-color: var(--body-background);
   width: 100%;
 }
 
-body{
+header, main, footer{
   background-color: var(--background-color);
   color: var(--text-color); 
   max-width: 94vw;
-  margin: 5vh auto;
+  margin: 0 auto;
+  padding: 1rem 2rem;
+}
+
+main{
+  padding: 2rem 4rem;
+}
+
+footer{
+  border-bottom-left-radius: 1rem;
+  border-bottom-right-radius: 1rem;
 }
 
 h1, h2, h3, h4, h5, h6, .logo-container a{
   font-family: "Bebas Neue", serif;
+}
+
+hr{
+  border: 1px solid var(--lavender-color);
+  margin: 0 -10px;
 }
 
 .course-pill-container:hover, .more-resources-websites img:hover{
