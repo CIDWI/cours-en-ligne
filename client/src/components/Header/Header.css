@@ -1,11 +1,34 @@
 header{
     position: fixed;
-    background-color: var(--background-color)
+    background-color: var(--background-color);
+    height: 15vh;
+    max-height: 100px;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
 }
 
 .logo-container a{
     font-size: 2.5rem;
     letter-spacing: 5px;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.logo-container a p{
+    font-size: 2rem;
+    color: var(--purple-color);
+    font-weight: 700;
+}
+
+.logo-container {
+    height: 100%;
+}
+
+.logo-container img{
+    height: 100%;
 }
 
 .theme-grade-container, .user-identity-container{

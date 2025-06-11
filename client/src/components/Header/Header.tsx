@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import { useTheme } from "../../ThemeContext";
 import './Header.css'
 import ProfilePicture from "../../assets/thispersondoesnotexist.jpg"
+import Logo from "../../assets/Logo_cidwi.png"
 
 export const Header = () => {
 
@@ -21,6 +22,12 @@ export const Header = () => {
 
     return (
         <header ref={navbarRef} className={`navbar ${scrolled ? "scrolled" : ""} ${darkMode === true ? "dark" : "   "}`}>
+            <div className="logo-container">
+                <Link to='/'>
+                    <img src={Logo} alt="Logo Cidwi" />
+                    <p>CIDWI</p>
+                </Link>
+            </div>
             <div className="theme-grade-container">
                 <div className="theme-container">
                     <button onClick={toggleTheme} className="px-4 py-2 border rounded">
@@ -31,9 +38,7 @@ export const Header = () => {
                     Classe
                 </div>
             </div>
-            <div className="logo-container">
-                <Link to='/'>CIDWI</Link>
-            </div>
+            
             <div className="user-identity-container">
                 <div className="user-name-container">
                     NOM Prénom
