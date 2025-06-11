@@ -10,7 +10,8 @@ h3{
 
 .chapter-button-container{
 	margin: 1rem;
-	border-left: 3px blue solid;
+	border-left: 3px var(--purple-color) solid;
 	display: flex;
 	flex-direction: column;
+	gap: 1rem;
 }

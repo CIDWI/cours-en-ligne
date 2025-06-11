@@ -33,8 +33,9 @@
 .dark{
   --background-color : #0c0b0e;
   --text-color : #F6F7F2;
-  --pills-background-color : #232329;
   --body-background: #202020;
+  --purple-color: #b895e7;
+  --lavender-color: #54358d;
 }
 
 html{
@@ -93,7 +94,7 @@ h1, h2, h3, h4, h5, h6, .logo-container a{
 }
 
 hr{
-  border: 1px solid var(--lavender-color);
+  border: 1px solid var(--purple-color);
   margin: 0 -10px 2rem 0;
 }
 
