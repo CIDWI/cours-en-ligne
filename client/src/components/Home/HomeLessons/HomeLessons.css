@@ -1,0 +1,7 @@
+.lesson-container{
+	border: 1px rgba(0, 0, 0, 0.342)  solid;
+	display: flex;
+	justify-content: space-between;
+	padding: 1rem 1.5rem 1rem 4rem;
+	font-size: 1.3rem;
+}

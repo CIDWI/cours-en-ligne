@@ -1,11 +1,12 @@
 import React from 'react'
 import { Lesson } from '../../../types/course'
+import "./HomeLessons.css"
 
 const LessonItem: React.FC<{ lesson: Lesson }> = ({ lesson }) => (
-  <div className="flex justify-between items-center py-2 px-3 border-b">
+  <div className="lesson-container">
     <span>{lesson.title}</span>
     <button
-      className={`${lesson.isDone ? 'bg-gray-400' : 'bg-purple-600'}`}
+      className={`${lesson.isDone ? "lesson-done-button" : "lesson-button-pending"} lesson-button`}
     >
       {lesson.isDone ? 'Continue' : 'Start'}
     </button>

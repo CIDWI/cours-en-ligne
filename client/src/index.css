@@ -94,7 +94,7 @@ h1, h2, h3, h4, h5, h6, .logo-container a{
 
 hr{
   border: 1px solid var(--lavender-color);
-  margin: 0 -10px;
+  margin: 0 -10px 2rem 0;
 }
 
 .course-pill-container:hover, .more-resources-websites img:hover{
