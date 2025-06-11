@@ -4,6 +4,7 @@ import { userController } from './modules/user/userController'
 import { authController } from './modules/auth/authController'
 import {courseController} from "./modules/cours/courseController";
 import {chapterController} from "./modules/chapter/chapterController";
+import {lessonController} from "./modules/lesson/lessonController";
 
 const app = express()
 
@@ -16,6 +17,7 @@ app.use('/user', userController)
 app.use('/auth', authController)
 app.use('/course', courseController)
 app.use('/chapter', chapterController)
+app.use('/lesson', lessonController)
 
 const port = process.env.PORT
   ? Number(process.env.PORT)

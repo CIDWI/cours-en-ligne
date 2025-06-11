@@ -79,14 +79,14 @@ chapterController.post('/', validator.body(createChapterSchema), async (req: JWT
                     });
                 }
 
-                
+
                 res.send(chapter);
             } else {
                 throw {status: 403, message: 'Forbidden'};
             }
 
         } catch (error: any) {
-            res.status(error.status ?? 500).send({error: error.message ?? "internal server error"});
+            res.status(error.status ?? 500).send({error: error.message ?? "Internal Server Error"});
         }
     },
 );
@@ -123,7 +123,7 @@ chapterController.put('/:id', validator.params(getChapterSchema), validator.body
                 throw {status: 403, message: 'Forbidden'};
             }
         } catch (error: any) {
-            res.status(error.status).send({error: error.message});
+            res.status(error.status ?? 500).send({error: error.message ?? "Internal Server Error"});
         }
     },
 );
@@ -155,7 +155,7 @@ chapterController.delete('/:id', validator.params(getChapterSchema), async (req:
             }
 
         } catch (error: any) {
-            res.status(error.status).send({error: error.message});
+            res.status(error.status ?? 500).send({error: error.message ?? "Internal Server Error"});
         }
 
     },
