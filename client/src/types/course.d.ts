@@ -10,7 +10,7 @@ export interface Chapter {
   lessons: Lesson[]
 }
 
-export interface CourseData {
+export interface Course {
   id: number
   title: string
   chapters: Chapter[]

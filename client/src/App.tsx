@@ -1,17 +1,30 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Home from './pages/Home/Home'
-import { ThemeProvider } from './ThemeContext'
+import Login from './pages/Login/Login'
+import PrivateRoute from './routes/PrivateRoute'
+import { ThemeProvider } from './contexts/ThemeContext'
+import { UserProvider } from './contexts/UserContext'
 
 export const App = () => {
 
   return (
-    <ThemeProvider>
-      <BrowserRouter>
-        <Routes>
-          <Route path='/' element={<Home/>}/>
-        </Routes>
-      </BrowserRouter>
-    </ThemeProvider>
+    <UserProvider>
+      <ThemeProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<Login />} />
+            <Route
+              path="/"
+              element={
+                <PrivateRoute>
+                  <Home />
+                </PrivateRoute>
+              }
+            />
+          </Routes>
+        </BrowserRouter>
+      </ThemeProvider>
+    </UserProvider> 
   )
 }
 
