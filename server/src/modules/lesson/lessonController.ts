@@ -29,6 +29,7 @@ const createLessonSchema = Joi.object({
     level: Joi.string().required(),
     languages: Joi.string().required(),
     chapterId: Joi.number().optional(),
+    exerciseId: Joi.number().required(),
 });
 
 const updateLessonSchema = Joi.object({
@@ -37,6 +38,7 @@ const updateLessonSchema = Joi.object({
     level: Joi.string().optional(),
     languages: Joi.string().optional(),
     chapterId: Joi.number().optional(),
+    exerciseId: Joi.number().optional(),
 });
 
 // GET all lessons
@@ -64,6 +66,10 @@ lessonController.post('/', validator.body(createLessonSchema), async (req: JWTRe
     try {
         if (req.auth?.role === 'admin') {
             const chapter = await chapterRepository.findOneBy({id: req.body.chapterId});
+            const exercise = await exerciseRepository.findOneBy({id: req.body.exerciseId});
+            if (!exercise) {
+                throw {status: 404, message: 'exercise not Found'};
+            }
             let lesson;
             if (req.body.chapterId) {
                 if (chapter) {
@@ -73,6 +79,7 @@ lessonController.post('/', validator.body(createLessonSchema), async (req: JWTRe
                         level: req.body.level,
                         languages: req.body.languages,
                         chapter: chapter,
+                        exercise: exercise,
                     });
                 } else {
                     throw {status: 400, message: 'No chapter found'};
@@ -83,6 +90,7 @@ lessonController.post('/', validator.body(createLessonSchema), async (req: JWTRe
                     link: req.body.link,
                     level: req.body.level,
                     languages: req.body.languages,
+                    exercise: exercise,
                 });
             }
             res.send(lesson);
@@ -100,30 +108,40 @@ lessonController.put('/:id', validator.params(getLessonSchema), validator.body(u
             if (req.auth?.role === 'admin') {
                 const id = Number(req.params.id);
                 const lesson = await lessonRepository.findOneBy({id});
-                const chapter = await chapterRepository.findOne({
-                    where: {id: req.body.chapterId},
-                    relations: ['lessons'],
-                });
+                const chapter = await chapterRepository.findOneBy({id: req.body.chapterId});
+                const exercise = await exerciseRepository.findOneBy({id: req.body.exerciseId});
 
                 if (lesson) {
-                    if (req.body.title || req.body.chapterId) {
-                        if (req.body.chapterId) {
-                            if (!chapter) {
-                                throw {status: 404, message: 'Chapter not found'};
-                            } else {
-                                lesson.chapter = chapter;
-                            }
+                    if (req.body.chapterId) {
+                        if (!chapter) {
+                            throw {status: 404, message: 'Chapter not found'};
+                        } else {
+                            lesson.chapter = chapter;
                         }
-
-                        if (req.body.title) {
-                            lesson.title = req.body.title;
-                        }
-
-                        await lessonRepository.save(lesson);
-                        res.send(lesson);
-                    } else {
-                        throw {status: 400, message: 'Missing information to modify'};
                     }
+                    if (req.body.exerciseId) {
+                        if (!exercise) {
+                            throw {status: 404, message: 'Exercise not found'};
+                        } else {
+                            lesson.exercise = exercise;
+                        }
+                    }
+                    if (req.body.title) {
+                        lesson.title = req.body.title;
+                    }
+                    if (req.body.link) {
+                        lesson.link = req.body.link;
+                    }
+                    if (req.body.level) {
+                        lesson.level = req.body.level;
+                    }
+                    if (req.body.languages) {
+                        lesson.languages = req.body.languages;
+                    }
+
+                    await lessonRepository.save(lesson);
+                    res.send(lesson);
+
                 } else {
                     throw {status: 404, message: 'Lesson not found'};
                 }
@@ -147,11 +165,6 @@ lessonController.delete('/:id', validator.params(getLessonSchema), async (req: J
             });
 
             if (lesson) {
-
-                if (lesson.exercise) {
-                    await exerciseRepository.delete(lesson.exercise);
-                }
-
                 await lessonRepository.delete({id});
             } else {
                 throw {status: 404, message: 'Lesson not found'};
