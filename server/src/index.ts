@@ -5,15 +5,8 @@ import { authController } from './modules/auth/authController'
 import {courseController} from "./modules/cours/courseController";
 import {chapterController} from "./modules/chapter/chapterController";
 import {lessonController} from "./modules/lesson/lessonController";
-import cors from 'cors'
-
 
 const app = express()
-
-app.use(cors({
-  origin: 'http://localhost:5173',
-  credentials: true
-}))
 
 app.use(express.json())
 app.get('/', (req, res) => {
