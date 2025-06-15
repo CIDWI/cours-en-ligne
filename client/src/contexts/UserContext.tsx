@@ -1,64 +1,80 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-  ReactNode,
-} from "react"
+import { createContext, useContext, useEffect, useState } from "react"
 
 interface User {
   id: number
   login: string
   role: string
+  firstName?: string
+  lastName?: string
 }
 
 interface UserContextType {
   user: User | null
   token: string | null
-  logout: () => void
   setUserFromLogin: (user: User, token: string) => void
+  logout: () => void
 }
 
-const UserContext = createContext<UserContextType | undefined>(undefined)
+const UserContext = createContext<UserContextType>({
+  user: null,
+  token: null,
+  setUserFromLogin: () => {},
+  logout: () => {},
+})
 
-export const UserProvider = ({ children }: { children: ReactNode }) => {
+export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [token, setToken] = useState<string | null>(null)
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token")
+    const storedUser = localStorage.getItem("user")
+
+    if (storedToken && storedUser) {
+      const parsedUser: User = JSON.parse(storedUser)
+      setToken(storedToken)
+      fetch(`http://localhost:3000/user/${parsedUser.id}`)
+        .then((res) => res.json())
+        .then((data) => {
+          if (data && data.firstName && data.lastName) {
+            setUser({ ...parsedUser, firstName: data.firstName, lastName: data.lastName })
+          } else {
+            setUser(parsedUser)
+          }
+        })
+        .catch(() => setUser(parsedUser))
+    }
+  }, [])
 
   const setUserFromLogin = (user: User, token: string) => {
     setUser(user)
     setToken(token)
     localStorage.setItem("token", token)
     localStorage.setItem("user", JSON.stringify(user))
+
+    // Chargement des infos prénom/nom depuis l’API
+    fetch(`http://localhost:3000/user/${user.id}`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data && data.firstName && data.lastName) {
+          setUser({ ...user, firstName: data.firstName, lastName: data.lastName })
+        }
+      })
+      .catch(() => {})
   }
 
   const logout = () => {
-    localStorage.removeItem("token")
-    localStorage.removeItem("user")
     setUser(null)
     setToken(null)
+    localStorage.removeItem("token")
+    localStorage.removeItem("user")
   }
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem("token")
-    const storedUser = localStorage.getItem("user")
-    if (storedToken && storedUser) {
-      setToken(storedToken)
-      setUser(JSON.parse(storedUser))
-    }
-  }, [])
-
   return (
-    <UserContext.Provider value={{ user, token, logout, setUserFromLogin }}>
+    <UserContext.Provider value={{ user, token, setUserFromLogin, logout }}>
       {children}
     </UserContext.Provider>
   )
 }
 
-export const useUser = (): UserContextType => {
-  const context = useContext(UserContext)
-  if (!context) {
-    throw new Error("useUser must be used within a UserProvider")
-  }
-  return context
-}
+export const useUser = () => useContext(UserContext)

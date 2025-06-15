@@ -4,7 +4,7 @@ import { Lesson } from './modules/lesson/lessonEntity'
 import { Chapter } from './modules/chapter/chapterEntity'
 import { Exercise } from './modules/exercise/exerciseEntity'
 import { Advancement } from './modules/advancement/advancementEntity'
-import {Course} from "./modules/cours/courseEntity";
+import { Course } from "./modules/cours/courseEntity";
 
 export const AppDataSource = new DataSource({
   type: 'mysql',

@@ -1,15 +1,16 @@
 import { useEffect, useRef, useState } from "react"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useTheme } from "../../contexts/ThemeContext"
 import { useUser } from "../../contexts/UserContext"
-import './Header.css'
+import "./Header.css"
 import Logo from "../../assets/Logo_cidwi.png"
 
 export const Header = () => {
   const { darkMode, toggleTheme } = useTheme()
-  const { user } = useUser()
+  const { user, logout } = useUser()
   const navbarRef = useRef<HTMLElement | null>(null)
   const [scrolled, setScrolled] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,6 +20,11 @@ export const Header = () => {
     window.addEventListener("scroll", handleScroll)
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
+
+  const handleLogout = () => {
+    logout()
+    navigate("/login")
+  }
 
   return (
     <header ref={navbarRef} className={`navbar ${scrolled ? "scrolled" : ""} ${darkMode ? "dark" : ""}`}>
@@ -35,11 +41,17 @@ export const Header = () => {
           </button>
         </div>
       </div>
+
       <div className="user-identity-container">
         <div className="grade-container">Classe</div>
         <div className="user-name-container">
-          {user ? user.login : "NOM Prénom"}
+          {user ? `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || user.login : "NOM Prénom"}
         </div>
+        {user && (
+          <button onClick={handleLogout} className="logout-button">
+            Se déconnecter
+          </button>
+        )}
       </div>
     </header>
   )

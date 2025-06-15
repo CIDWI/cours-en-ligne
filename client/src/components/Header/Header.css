@@ -53,3 +53,12 @@ header{
     border: none;
     cursor: pointer;
 }
+
+.logout-button{
+	padding: 0.5rem 1rem;
+	background-color: var(--purple-color);
+	color: whitesmoke;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}

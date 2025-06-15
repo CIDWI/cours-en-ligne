@@ -32,7 +32,7 @@ const Login = () => {
     setError("")
 
     try {
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch("http://localhost:3000/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ login, password }),
@@ -57,18 +57,20 @@ const Login = () => {
         return
       }
 
-      if (data.token && data.user) {
-        setUserFromLogin(data.user, data.token)
+      if (data.token) {
+        const user = data.user ?? {
+          id: 0,
+          login: login,
+          role: "user",
+        }
+
+        setUserFromLogin(user, data.token)
         navigate("/")
       } else {
         setError("Réponse invalide du serveur.")
       }
-    } catch (err) {
-      if (err instanceof Error) {
-        setError(`Erreur de connexion : ${err.message}`)
-      } else {
-        setError("Connexion impossible. Vérifiez votre réseau.")
-      }
+    } catch {
+      setError("Connexion impossible. Vérifiez votre réseau.")
     }
   }
 

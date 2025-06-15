@@ -2,16 +2,21 @@ import express from 'express'
 import { AppDataSource } from './dataSource'
 import { userController } from './modules/user/userController'
 import { authController } from './modules/auth/authController'
-import {courseController} from "./modules/cours/courseController";
-import {chapterController} from "./modules/chapter/chapterController";
-import {lessonController} from "./modules/lesson/lessonController";
+import { courseController } from "./modules/cours/courseController";
+import { chapterController } from "./modules/chapter/chapterController";
+import { lessonController } from "./modules/lesson/lessonController";
+import cors from 'cors';
 
 const app = express()
+
+
 
 app.use(express.json())
 app.get('/', (req, res) => {
   res.send('Plop!')
 })
+
+app.use(cors());
 
 app.use('/user', userController)
 app.use('/auth', authController)
