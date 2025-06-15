@@ -13,7 +13,7 @@ export const AppDataSource = new DataSource({
   username: 'root',
   password: 'root',
   database: 'app_db',
-  entities: [User,Lesson, Chapter, Exercise, Advancement,Course],
+  entities: [User, Lesson, Chapter, Exercise, Advancement, Course],
   synchronize: true,
   logging: false,
 })

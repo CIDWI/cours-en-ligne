@@ -5,18 +5,22 @@ import Logo from "../../assets/Logo_cidwi.png"
 import "./Login.css"
 
 interface LoginResponse {
-  token: string
+  token?: string
+  user?: {
+    id: number
+    login: string
+    role: string
+  }
   message?: string
 }
 
 const Login = () => {
-  const { user, setUserFromToken } = useUser()
-  const [email, setEmail] = useState("")
+  const { user, setUserFromLogin } = useUser()
+  const [login, setLogin] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const navigate = useNavigate()
 
-  // Si l'utilisateur est déjà connecté, rediriger vers la page d'accueil
   useEffect(() => {
     if (user) {
       navigate("/")
@@ -28,26 +32,42 @@ const Login = () => {
     setError("")
 
     try {
-      const response = await fetch("http://localhost:3000/auth/login", {
+      const response = await fetch("http://localhost:3000/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ login, password }),
       })
 
       const data: LoginResponse = await response.json()
 
       if (!response.ok) {
-        throw new Error(data.message || "Échec de la connexion")
+        switch (response.status) {
+          case 400:
+            setError("Veuillez remplir tous les champs.")
+            break
+          case 401:
+            setError("Nom d'utilisateur ou mot de passe incorrect.")
+            break
+          case 500:
+            setError("Erreur serveur. Veuillez réessayer plus tard.")
+            break
+          default:
+            setError(data.message || "Erreur inconnue.")
+        }
+        return
       }
 
-      localStorage.setItem("token", data.token)
-      setUserFromToken(data.token)
-      navigate("/")
-    } catch (err: unknown) {
-      if (err instanceof Error) {
-        setError(err.message)
+      if (data.token && data.user) {
+        setUserFromLogin(data.user, data.token)
+        navigate("/")
       } else {
-        setError("Une erreur inattendue est survenue.")
+        setError("Réponse invalide du serveur.")
+      }
+    } catch (err) {
+      if (err instanceof Error) {
+        setError(`Erreur de connexion : ${err.message}`)
+      } else {
+        setError("Connexion impossible. Vérifiez votre réseau.")
       }
     }
   }
@@ -59,10 +79,10 @@ const Login = () => {
         <h2>Connexion</h2>
         <form onSubmit={handleSubmit}>
           <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            type="text"
+            placeholder="Nom d'utilisateur"
+            value={login}
+            onChange={(e) => setLogin(e.target.value)}
             required
           />
           <input
