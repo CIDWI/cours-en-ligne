@@ -1,4 +1,4 @@
-import { useState, FormEvent } from "react"
+import { useState, useEffect, FormEvent } from "react"
 import { useNavigate } from "react-router-dom"
 import { useUser } from "../../contexts/UserContext"
 import Logo from "../../assets/Logo_cidwi.png"
@@ -10,11 +10,18 @@ interface LoginResponse {
 }
 
 const Login = () => {
-  const { setUserFromToken } = useUser()
+  const { user, setUserFromToken } = useUser()
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [error, setError] = useState("")
   const navigate = useNavigate()
+
+  // Si l'utilisateur est déjà connecté, rediriger vers la page d'accueil
+  useEffect(() => {
+    if (user) {
+      navigate("/")
+    }
+  }, [user, navigate])
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -48,11 +55,7 @@ const Login = () => {
   return (
     <div className="login-page">
       <div className="login-card">
-        <img
-          src={Logo}
-          alt="Logo de la plateforme"
-          className="login-logo"
-        />
+        <img src={Logo} alt="Logo de la plateforme" className="login-logo" />
         <h2>Connexion</h2>
         <form onSubmit={handleSubmit}>
           <input

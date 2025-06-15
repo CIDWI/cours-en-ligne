@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import Page from "../../components/Page/Page"
+import Page from "../../layout/Page/Page"
 import HomeChapters from "../../components/Home/HomeChapters/HomeChapters"
 import { useUser } from "../../contexts/UserContext"
 import { Course, Chapter } from "../../types/course"
