@@ -6,7 +6,8 @@ import { authController } from './modules/auth/authController'
 import { courseController } from './modules/cours/courseController'
 import { chapterController } from './modules/chapter/chapterController'
 import { lessonController } from './modules/lesson/lessonController'
-import { verifyToken } from './middleware/verifyToken'
+import { exerciseController } from './modules/exercise/exerciseController'
+import { advancementController } from './modules/advancement/advancementController'
 
 const app = express()
 
@@ -28,10 +29,12 @@ app.get('/', (req, res) => {
 app.use('/auth', authController)
 
 // Routes protégées par JWT
-app.use('/user', verifyToken, userController)
-app.use('/course', verifyToken, courseController)
-app.use('/chapter', verifyToken, chapterController)
-app.use('/lesson', verifyToken, lessonController)
+app.use('/user', userController)
+app.use('/course', courseController)
+app.use('/chapter', chapterController)
+app.use('/lesson', lessonController)
+app.use('/exercise', exerciseController)
+app.use('/advancement', advancementController)
 
 // Lancement du serveur
 const port = process.env.PORT

@@ -1,3 +1,4 @@
+
 import {AppDataSource} from "./dataSource";
 import {User} from "./modules/user/userEntity";
 import {userRepository} from "./modules/user/userRepository";
@@ -32,21 +33,27 @@ const test = async () => {
     const user1 = new User()
     user1.login = 'user1'
     user1.password = hashedPassword
-    user1.role = 'user';
+    user1.role = 'user'
+    user1.firstName = 'Benjamin'
+    user1.lastName = 'Zaoui';
 
     await userRepository.save(user1)
 
     const user2 = new User()
     user2.login = 'user2'
     user2.password = hashedPassword
-    user2.role = 'user';
+    user2.role = 'user'
+    user2.firstName = 'Aaron'
+    user2.lastName = 'Saada';
 
     await userRepository.save(user2)
 
     const user3 = new User()
     user3.login = 'admin'
     user3.password = hashedPassword
-    user3.role = 'admin';
+    user3.role = 'admin'
+    user3.firstName = 'Yoel'
+    user3.lastName = 'Sillam'
 
     await userRepository.save(user3)
 
