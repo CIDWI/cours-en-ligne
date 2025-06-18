@@ -107,9 +107,15 @@ courseController.put(
         const id = Number(req.params.id)
         const course = await courseRepository.findOneBy({ id })
 
-        if (!course) throw { status: 404, message: 'Course not found' }
+        if (!course) {
+          throw { status: 404, message: 'Course not found' }
+        }
 
-        if (!req.body.title) throw { status: 400, message: 'Missing title to modify' }
+        if (!req.body.title) {
+          throw {
+            status: 400, message: 'Missing title to modify'
+          }
+        } 
 
         course.title = req.body.title
         await courseRepository.save(course)

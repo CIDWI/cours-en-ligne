@@ -136,9 +136,7 @@ const test = async () => {
 
     await lessonRepository.save(lesson4)
 
-    //                                          //
-
-
+    //                  Exercices                   //
 
     //init exercice
     const exercise1 = new Exercise()

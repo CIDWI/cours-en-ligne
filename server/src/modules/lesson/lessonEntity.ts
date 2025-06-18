@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -29,5 +30,6 @@ export class Lesson {
   chapter: Chapter
 
   @OneToOne(() => Exercise, (exercise) => exercise.lesson)
+    // Rajouter @JoinColumn
   exercise: Exercise
 }

@@ -23,7 +23,7 @@ authController.post(
     try {
       const user = await userRepository.findOneBy({ login });
       if (!user) {
-        res.status(401).json({ message: 'Identifiant ou mot de passe incorrect' });
+        res.status(401).json({ message: 'Incorrect password or login' });
         return;
       }
 
@@ -34,7 +34,7 @@ authController.post(
         .digest('hex');
 
       if (hashedPassword !== user.password) {
-        res.status(401).json({ message: 'Identifiant ou mot de passe incorrect' });
+        res.status(401).json({ message: 'Incorrect password or login' });
         return;
       }
 
@@ -56,7 +56,7 @@ authController.post(
       });
     } catch (error) {
       console.error(error);
-      res.status(500).json({ message: 'Erreur serveur. Veuillez réessayer plus tard.' });
+      res.status(500).json({ message: 'Internal server error. Try again later' });
     }
   }
 );
