@@ -1,9 +1,10 @@
-import { Router } from 'express'
+import { Request, Response, Router } from 'express'
 import { userRepository } from '../user/userRepository'
-import { createValidator } from 'express-joi-validation'
 import Joi from 'joi'
+import { createValidator } from 'express-joi-validation'
 import jwt from 'jsonwebtoken'
-import crypto from "crypto";
+import crypto from 'crypto'
+import 'dotenv/config'
 
 export const authController = Router()
 const validator = createValidator()
@@ -14,53 +15,48 @@ const loginSchema = Joi.object({
 })
 
 authController.post(
-    '/login',
-    validator.body(loginSchema),
-    async (req, res) => {
-        try {
-            // Récupérer l'utilisateur depuis la base de données
-            const user = await userRepository.findOneBy({
-                login: req.body.login,
-            });
+  '/login',
+  validator.body(loginSchema),
+  async (req: Request, res: Response) => {
+    const { login, password } = req.body
 
-            // Vérifier si l'utilisateur existe et si le mot de passe correspond
-            if (user) {
-                // Récupérer le salt stocké dans la base de données
-                const storedSalt = process.env.SALT!;
+    try {
+      const user = await userRepository.findOneBy({ login })
+      if (!user) {
+        res.status(401).json({ message: 'Identifiant ou mot de passe incorrect' })
+        return
+      }
 
-                // Hacher le mot de passe fourni avec le salt stocké
-                const hashedPasswordAttempt = crypto
-                    .createHmac('sha256', storedSalt)
-                    .update(req.body.password)
-                    .digest('hex');
-                // Comparer le mot de passe haché avec celui stocké dans la base de données
-                if (hashedPasswordAttempt === user.password) {
-                    // Créer le token JWT si les mots de passe correspondent
-                    const token = jwt.sign(
-                        {
-                            id: user.id,
-                            role: user.role,
-                        },
-                        process.env.JWT_SECRET!,
-                        {
-                            algorithm: 'HS256',
-                        }
-                    );
+      const salt = process.env.SALT!
+      const hashedPassword = crypto
+        .createHmac('sha256', salt)
+        .update(password)
+        .digest('hex')
 
-                    res.send({
-                        token,
-                    });
-                } else {
-                    res.sendStatus(401); // Mot de passe incorrect
-                }
-            } else {
-                res.sendStatus(401); // Utilisateur non trouvé
-            }
-        } catch (error:any) {
-            res.status(400).send({
-                error: error.message,
-                detail: error.detail,
-            });
-        }
+      if (hashedPassword !== user.password) {
+        res.status(401).json({ message: 'Identifiant ou mot de passe incorrect' })
+        return
+      }
+
+      const token = jwt.sign(
+        { id: user.id, role: user.role },
+        process.env.JWT_SECRET!,
+        { algorithm: 'HS256', expiresIn: '24h' }
+      )
+
+      res.json({
+        token,
+        user: {
+          id: user.id,
+          login: user.login,
+          role: user.role,
+          firstName: user.firstName,
+          lastName: user.lastName,
+        },
+      })
+    } catch (err) {
+      console.error(err)
+      res.status(500).json({ message: 'Erreur serveur. Veuillez réessayer plus tard.' })
     }
-);
+  }
+)

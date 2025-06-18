@@ -26,11 +26,22 @@ export const Header = () => {
     navigate("/login")
   }
 
+  const getDisplayedName = () => {
+    if (!user) return "NOM Prénom"
+    if (user.firstName || user.lastName) {
+      return `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim()
+    }
+    return user.login
+  }
+
   return (
-    <header ref={navbarRef} className={`navbar ${scrolled ? "scrolled" : ""} ${darkMode ? "dark" : ""}`}>
+    <header
+      ref={navbarRef}
+      className={`navbar ${scrolled ? "scrolled" : ""} ${darkMode ? "dark" : ""}`}
+    >
       <div className="logo-theme-container">
         <div className="logo-container">
-          <Link to='/'>
+          <Link to="/">
             <img src={Logo} alt="Logo Cidwi" />
             <p>CIDWI</p>
           </Link>
@@ -45,7 +56,7 @@ export const Header = () => {
       <div className="user-identity-container">
         <div className="grade-container">Classe</div>
         <div className="user-name-container">
-          {user ? `${user.firstName ?? ""} ${user.lastName ?? ""}`.trim() || user.login : "NOM Prénom"}
+          {getDisplayedName()}
         </div>
         {user && (
           <button onClick={handleLogout} className="logout-button">
@@ -56,3 +67,5 @@ export const Header = () => {
     </header>
   )
 }
+
+export default Header

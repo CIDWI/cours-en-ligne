@@ -1,38 +1,33 @@
 import {
   Column,
   Entity,
-  JoinColumn,
-  ManyToMany,
   ManyToOne,
-  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
-  TableInheritance,
-} from "typeorm";
-import { Chapter } from "../chapter/chapterEntity";
-import { Exercise } from "../exercise/exerciseEntity";
+} from "typeorm"
+import { Chapter } from "../chapter/chapterEntity"
+import { Exercise } from "../exercise/exerciseEntity"
 
 @Entity()
 export class Lesson {
   @PrimaryGeneratedColumn()
-  id: number;
-  @Column({
-    unique: true,
-  })
-  title: string;
+  id: number
+
+  @Column({ unique: true })
+  title: string
+
   @Column()
-  link: string;
+  link: string
+
   @Column()
-  level: string;
-  @Column({
-    nullable: false,
-  })
-  languages: string;
+  level: string
+
+  @Column()
+  languages: string
 
   @ManyToOne(() => Chapter, (chapter) => chapter.lessons)
-  chapter: Chapter;
+  chapter: Chapter
 
   @OneToOne(() => Exercise, (exercise) => exercise.lesson)
-  @JoinColumn()
-  exercise: Exercise;
+  exercise: Exercise
 }

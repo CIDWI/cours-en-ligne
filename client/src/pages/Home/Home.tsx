@@ -19,14 +19,12 @@ function Home() {
           },
         })
 
-        if (!response.ok) {
-          throw new Error("Erreur lors du chargement des cours")
-        }
-
+        if (!response.ok) throw new Error("Erreur lors du chargement des cours")
         const data: Course[] = await response.json()
         setCourses(data)
       } catch (error) {
         console.error("Erreur de chargement :", error)
+        setCourses([])
       } finally {
         setLoading(false)
       }
