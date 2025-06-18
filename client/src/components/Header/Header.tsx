@@ -58,6 +58,11 @@ export const Header = () => {
         <div className="user-name-container">
           {getDisplayedName()}
         </div>
+        {user?.role === "admin" && (
+          <Link to="/admin" className="dashboard-button">
+            Dashboard
+          </Link>
+        )}
         {user && (
           <button onClick={handleLogout} className="logout-button">
             Se déconnecter

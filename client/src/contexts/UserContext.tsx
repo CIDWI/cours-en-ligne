@@ -1,3 +1,5 @@
+// UserContext.tsx (entier avec loadingUser ajouté)
+
 import { createContext, useContext, useEffect, useState } from "react"
 
 interface User {
@@ -11,6 +13,7 @@ interface User {
 interface UserContextType {
   user: User | null
   token: string | null
+  loadingUser: boolean
   setUserFromLogin: (user: User, token: string) => void
   logout: () => void
 }
@@ -18,6 +21,7 @@ interface UserContextType {
 const UserContext = createContext<UserContextType>({
   user: null,
   token: null,
+  loadingUser: true,
   setUserFromLogin: () => {},
   logout: () => {},
 })
@@ -25,6 +29,7 @@ const UserContext = createContext<UserContextType>({
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null)
   const [token, setToken] = useState<string | null>(null)
+  const [loadingUser, setLoadingUser] = useState(true)
 
   useEffect(() => {
     const storedToken = localStorage.getItem("token")
@@ -43,6 +48,9 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
           }
         })
         .catch(() => setUser(parsedUser))
+        .finally(() => setLoadingUser(false))
+    } else {
+      setLoadingUser(false)
     }
   }, [])
 
@@ -52,7 +60,6 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
     localStorage.setItem("token", token)
     localStorage.setItem("user", JSON.stringify(user))
 
-    // Chargement des infos prénom/nom depuis l’API
     fetch(`http://localhost:3000/user/${user.id}`)
       .then((res) => res.json())
       .then((data) => {
@@ -71,7 +78,7 @@ export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   }
 
   return (
-    <UserContext.Provider value={{ user, token, setUserFromLogin, logout }}>
+    <UserContext.Provider value={{ user, token, loadingUser, setUserFromLogin, logout }}>
       {children}
     </UserContext.Provider>
   )

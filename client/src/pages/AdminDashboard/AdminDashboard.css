@@ -1,0 +1,83 @@
+.admin-dashboard {
+  max-width: 600px;
+  margin: 80px auto;
+  padding: 30px;
+  background-color: var(--background, #ffffff);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+  transition: background-color 0.3s ease;
+}
+
+.admin-dashboard h1 {
+  font-size: 28px;
+  text-align: center;
+  margin-bottom: 30px;
+  color: var(--text-color, #333333);
+}
+
+.admin-daboard-tabs-button{
+	display: flex;
+	gap: 1rem;
+	margin: 1rem 1rem 2rem 1rem;
+}
+
+.admin-daboard-tabs-button button{
+	min-width: 100px;
+	width: 150px;
+}
+
+.admin-dashboard form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.admin-dashboard label {
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--text-color, #333333);
+}
+
+.admin-dashboard input {
+  padding: 10px 14px;
+  border: 1px solid #cccccc;
+  border-radius: 6px;
+  font-size: 16px;
+  transition: border-color 0.2s;
+}
+
+.admin-dashboard input:focus {
+  outline: none;
+  border-color: #5D1F7E;
+}
+
+.admin-dashboard button {
+  background-color: #5D1F7E;
+  color: white;
+  padding: 12px;
+  border: none;
+  border-radius: 6px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.admin-dashboard button:hover {
+  background-color: #4a1865;
+}
+
+.admin-dashboard p {
+  margin-top: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.admin-dashboard p[style*="color: green"] {
+  color: #57924f;
+}
+
+.admin-dashboard p[style*="color: red"] {
+  color: #d32f2f;
+}

@@ -4,6 +4,7 @@ import Login from './pages/Login/Login'
 import PrivateRoute from './routes/PrivateRoute'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { UserProvider } from './contexts/UserContext'
+import AdminDashboard from './pages/AdminDashboard/AdminDashboard'
 
 export const App = () => {
 
@@ -18,6 +19,14 @@ export const App = () => {
               element={
                 <PrivateRoute>
                   <Home />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/admin"
+              element={
+                <PrivateRoute>
+                  <AdminDashboard />
                 </PrivateRoute>
               }
             />
