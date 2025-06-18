@@ -16,13 +16,15 @@
   color: var(--text-color, #333333);
 }
 
-.admin-daboard-tabs-button{
+.admin-dashboard-tabs-button{
 	display: flex;
+	justify-content: center;
+	align-items: center;
 	gap: 1rem;
 	margin: 1rem 1rem 2rem 1rem;
 }
 
-.admin-daboard-tabs-button button{
+.admin-dashboard-tabs-button button{
 	min-width: 100px;
 	width: 150px;
 }
