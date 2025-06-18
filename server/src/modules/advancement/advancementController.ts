@@ -67,7 +67,42 @@ advancementController.get('/:id', validator.params(getAdvancementSchema), async 
     }
 
 });
+//GET advancement by ID USER (admin only)
+advancementController.get('/user/:id', validator.params(getAdvancementSchema), async (req: JWTRequest, res) => {
+    const userId = Number(req.params.id);
+    if (req.auth?.role === "admin") {
+    const user = await userRepository.findOneBy({ id: userId });
 
+    if (!user) {
+        res.status(404).send({error: 'User not found'});
+    }
+       else {
+
+        const advancements = await advancementRepository.find({
+            where: {
+                user: { id: userId }
+            },
+            relations: ['lesson'],
+        });
+
+        res.send(advancements);
+    }
+    }
+    else {
+        if (userId === req.auth?.id) {
+            const advancements = await advancementRepository.find({
+                where: {
+                    user: { id: userId }
+                },
+                relations: ['lesson'],
+            });
+            res.send(advancements);
+        } else{
+          res.status(404).send({error: 'Forbidden'});
+        }
+    }
+
+});
 //POST new advancement (admin only)
 advancementController.post('/', validator.body(createAdvancementSchema), async (req: JWTRequest, res) => {
     try {

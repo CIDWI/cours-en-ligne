@@ -11,6 +11,7 @@ import {
 } from "typeorm";
 import { Lesson } from "../lesson/lessonEntity";
 import { User } from "../user/userEntity";
+import {Course} from "../cours/courseEntity";
 
 @Entity()
 export class Advancement {
@@ -21,7 +22,7 @@ export class Advancement {
   @OneToOne(() => Lesson)
   @JoinColumn()
   lesson: Lesson;
-  @OneToOne(() => User)
+  @ManyToOne(() => User, (user) => user.advancements)
   @JoinColumn()
   user: User;
 }

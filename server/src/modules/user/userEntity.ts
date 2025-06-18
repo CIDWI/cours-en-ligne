@@ -1,4 +1,6 @@
-import {Column, Entity, PrimaryGeneratedColumn,} from "typeorm";
+import {Column, Entity, OneToMany, PrimaryGeneratedColumn,} from "typeorm";
+import {Chapter} from "../chapter/chapterEntity";
+import {Advancement} from "../advancement/advancementEntity";
 
 @Entity()
 export class User {
@@ -18,4 +20,6 @@ export class User {
     firstName: string;
     @Column()
     lastName: string;
+    @OneToMany(() => Advancement, (advancement) => advancement.user)
+    advancements: Advancement[];
 }
