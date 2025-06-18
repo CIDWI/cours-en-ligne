@@ -52,11 +52,11 @@ courseController.get('/with-lessons/:userId', async (req: JWTRequest, res) => {
         },
       },
       order: {
-        title: 'ASC',
+        id: 'ASC',
         chapters: {
-          title: 'ASC',
+          id: 'ASC',
           lessons: {
-            title: 'ASC',
+            id: 'ASC',
           },
         },
       },

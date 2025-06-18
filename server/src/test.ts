@@ -59,70 +59,91 @@ const test = async () => {
 
 //init course
     const course1 = new Course()
-    course1.title = "Course 1";
+    course1.title = "Introduction au HTML";
 
     await courseRepository.save(course1);
 
     const course2 = new Course()
-    course2.title = "Course 2";
+    course2.title = "Introduction au CSS";
 
     await courseRepository.save(course2);
 
+    const course3 = new Course()
+    course3.title = "Introduction au JavaScript";
+
+    await courseRepository.save(course3);
+
     //init Chapitre
     const chapter1 = new Chapter()
-    chapter1.title = 'Les bases HTML'
+    chapter1.title = 'Les balises de texte, titre et lien'
     chapter1.course = course1;
     await chapterRepository.save(chapter1)
 
     const chapter2 = new Chapter()
-    chapter2.title = 'Ajouts de CSS'
-    chapter1.course = course1;
+    chapter2.title = 'Introduction au CSS & son ajout au HTML'
+    chapter2.course = course2;
 
     await chapterRepository.save(chapter2)
 
     const chapter3 = new Chapter()
-    chapter3.title = 'Dynamisation avec JS'
-    chapter3.course = course2;
+    chapter3.title = 'Introduction au JavaScript'
+    chapter3.course = course3;
 
     await chapterRepository.save(chapter3)
 
+    //                  LESSONS                 //
 
-    //init lesson
+    // Chapitre 1
     const lesson1 = new Lesson()
-    lesson1.title = 'Lesson 1'
+    lesson1.title = 'Les balises de bases du HTML'
     lesson1.level = '1'
-    lesson1.languages = 'CSS'
-    lesson1.chapter = chapter2;
+    lesson1.languages = 'HTML'
+    lesson1.chapter = chapter1;
     lesson1.link = 'https://www.youtube.com/watch?v=GBIIQ0kP15E'
-
 
     await lessonRepository.save(lesson1)
 
     const lesson2 = new Lesson()
-    lesson2.title = 'Lesson 2'
-    lesson2.level = '2'
-    lesson2.languages = 'CSS'
-    lesson2.chapter = chapter2;
+    lesson2.title = 'Les différents types de balises'
+    lesson2.level = '1'
+    lesson2.languages = 'HTML'
+    lesson2.chapter = chapter1;
     lesson2.link = 'https://www.youtube.com/watch?v=GBIIQ0kP15E'
-
 
     await lessonRepository.save(lesson2)
 
+
+    // Chapitre 2
+
     const lesson3 = new Lesson()
-    lesson3.title = 'Lesson 3'
-    lesson3.level = '3'
-    lesson3.languages = 'JS'
-    lesson3.chapter = chapter1;
+    lesson3.title = 'Ajout de style en HTML grâce au CSS'
+    lesson3.level = '1'
+    lesson3.languages = 'CSS'
+    lesson3.chapter = chapter2;
     lesson3.link = 'https://www.youtube.com/watch?v=GBIIQ0kP15E'
 
-
     await lessonRepository.save(lesson3)
+
+
+    // Chapitre 3
+
+    const lesson4 = new Lesson()
+    lesson4.title = 'Introduction au concept des variables'
+    lesson4.level = '2'
+    lesson4.languages = 'JavaScript'
+    lesson4.chapter = chapter3;
+    lesson4.link = 'https://www.youtube.com/watch?v=GBIIQ0kP15E'
+
+    await lessonRepository.save(lesson4)
+
+    //                                          //
+
 
 
     //init exercice
     const exercise1 = new Exercise()
     exercise1.title = 'Exercise 1'
-    exercise1.content = 'reproduisez cette image'
+    exercise1.content = 'Reproduisez cette image'
     exercise1.imageLink = '/image/img.png'
     exercise1.lesson = lesson1
 
@@ -130,7 +151,7 @@ const test = async () => {
 
     const exercise2 = new Exercise()
     exercise2.title = 'Exercise 2'
-    exercise2.content = 'reproduisez cette image'
+    exercise2.content = 'Reproduisez cette image'
     exercise2.imageLink = '/image/img.png'
     exercise2.lesson = lesson2
 
@@ -138,7 +159,7 @@ const test = async () => {
 
     const exercise3 = new Exercise()
     exercise3.title = 'Exercise 3'
-    exercise3.content = 'reproduisez cette vidéo'
+    exercise3.content = 'Reproduisez cette vidéo'
     exercise3.imageLink = '/image/img.png'
     exercise3.lesson = lesson3
 

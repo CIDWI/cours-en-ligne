@@ -3,7 +3,11 @@
     flex-direction: column;
 }
 
-h1{
+.homepage-container h1{
     font-size: 3rem;
     margin-bottom: 2rem;
+}
+
+.homepage-container h2{
+    font-size: 2.5rem;
 }
