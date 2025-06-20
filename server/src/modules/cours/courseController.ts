@@ -1,146 +1,218 @@
-import 'dotenv/config';
-import { Router } from 'express';
-import { courseRepository } from './courseRepository';
-import { createValidator } from 'express-joi-validation';
-import Joi from 'joi';
+import 'dotenv/config'
+import { Router } from 'express'
+import { courseRepository } from './courseRepository'
+import { createValidator } from 'express-joi-validation'
+import Joi from 'joi'
 import {
     expressjwt,
     Request as JWTRequest,
-} from 'express-jwt';
+} from 'express-jwt'
 
-export const courseController = Router();
-const validator = createValidator();
+export const courseController = Router()
+const validator = createValidator()
 
 // Middleware JWT
 courseController.use(
     expressjwt({
         secret: process.env.JWT_SECRET!,
         algorithms: ['HS256'],
-    }),
-);
+    })
+)
 
 // Joi Schemas
 const createCourseSchema = Joi.object({
     title: Joi.string().required(),
-});
+})
 
 const getCourseSchema = Joi.object({
     id: Joi.number().required(),
-});
+})
 
 const updateCourseSchema = Joi.object({
     title: Joi.string().optional(),
-});
+})
 
-// GET all courses
+//          GET ALL COURSES         //
+
 courseController.get('/', async (req: JWTRequest, res) => {
 
-        res.send(await courseRepository.find({ relations: ['chapters'] }));
+    const courses = await courseRepository.find({
+        relations: {
+            chapters: {
+                lessons: {
+                    exercise: true,
+                },
+            },
+        },
+        order: {
+            id: 'ASC',
+            chapters: {
+                id: 'ASC',
+                lessons: {
+                    id: 'ASC',
+                },
+            },
+        },
+    })
+    res.send(courses)
 
-});
+})
 
-// GET one course by id
+
+//          GET COURSE BY ID          //
+
 courseController.get('/:id', validator.params(getCourseSchema), async (req: JWTRequest, res) => {
-        const id = Number(req.params.id);
-        const course = await courseRepository.findOne({
-            where: { id },
-            relations: ['chapters'],
-        });
-        if (course) {
-            res.send(course);
 
-        }
-        else {
-            res.status(404).send({ error: 'Course not found' });
-        }
-    },
-);
+    const id = Number(req.params.id)
+    const course = await courseRepository.findOne({
 
-// CREATE course (admin only)
+        where: { id },
+        relations: ['chapters']
+
+    })
+
+    if (course) {
+
+        res.send(course)
+
+    } else {
+
+        res.status(404).send({ error: 'Course Not Found' })
+
+    }
+})
+
+//          CREATE COURSE         //
+
 courseController.post('/', validator.body(createCourseSchema), async (req: JWTRequest, res) => {
 
     try {
 
         if (req.auth?.role === 'admin') {
-            const course = await courseRepository.save({ title: req.body.title });
-            res.send(course);
-        }
-        else {
-            throw {status: 403, message: 'Forbidden'};
+
+            const course = await courseRepository.save({ title: req.body.title })
+            res.send(course)
+
+        } else {
+
+            throw { status: 403, message: 'Forbidden' }
+
         }
 
-    }
-    catch (error: any) {
-        res.status(error.status).send({error: error.message});
-    }
-    },
-);
+    } catch (error: any) {
 
-// UPDATE course (admin only)
-courseController.put('/:id',validator.params(getCourseSchema), validator.body(updateCourseSchema), async (req: JWTRequest, res) => {
+        res.status(error.status || 500).send({ error: error.message || 'Internal Server Error' })
+
+    }
+
+})
+
+//          UPDATE COURSE          //ben
+
+courseController.put('/:id', validator.params(getCourseSchema), validator.body(updateCourseSchema), async (req: JWTRequest, res) => {
+
     try {
+
         if (req.auth?.role === 'admin') {
+
             const id = Number(req.params.id);
             const course = await courseRepository.findOneBy({ id });
 
             if (course) {
+
                 if (req.body.title) {
+
                     course.title = req.body.title;
                     await courseRepository.save(course);
                     res.send(course);
+
                 }
+
                 else {
-                    throw {status: 400, message: 'missing information to modify'};
+
+                    throw { status: 400, message: 'Missing Information To Modify' };
+
                 }
 
             }
+
             else {
-                throw {status: 404, message: 'Course not found'};
+
+                throw { status: 404, message: 'Course Not Found' };
+
             }
         }
+
         else {
-            throw {status: 403, message: 'Forbidden'};
+
+            throw { status: 403, message: 'Forbidden' };
+
         }
     }
-    catch (error: any) {
-        res.status(error.status).send({error: error.message});
-    }
-    },
-);
 
-// DELETE course (admin only)
+    catch (error: any) {
+
+        res.status(error.status || 500).send({ error: error.message || 'Internal Server Error' })
+
+    }
+})
+
+
+//          DELETE COURSE BY ID         //ben
+
+
 courseController.delete('/:id', validator.params(getCourseSchema), async (req: JWTRequest, res) => {
-    try {
-        if (req.auth?.role === 'admin') {
-            const id = Number(req.params.id);
-            const course = await courseRepository.findOne({
-                where: { id },
-                relations: ['chapters'],
-            });
-            if (course) {
-                if (course.chapters.length === 0) {
-                    await courseRepository.delete({ id });
-                    res.sendStatus(204);
+
+        try {
+
+            if (req.auth?.role === 'admin') {
+
+                const id = Number(req.params.id);
+                const course = await courseRepository.findOne({
+
+                    where: { id },
+                    relations: ['chapters']
+
+                });
+
+                if (course) {
+
+                    if (course.chapters.length === 0) {
+
+                        await courseRepository.delete({ id });
+                        res.sendStatus(204);
+
+                    }
+
+                    else {
+
+                        throw { status: 400, message: 'Cannot Delete Course With Chapters' };
+
+                    }
+
                 }
+
                 else {
-                    throw {status: 400, message: 'Cannot delete course with chapters'};
+
+                    throw { status: 400, message: 'Course Not Found' };
+
                 }
 
+
             }
+
             else {
-                throw {status: 400, message: 'Course not found'};
+
+                throw { status: 403, message: 'Forbidden' };
+
             }
 
+        }
+        catch (error: any) {
+
+            res.status(error.status || 500).send({ error: error.message || 'Internal Server Error' })
 
         }
-        else {
-            throw {status: 403, message: 'Forbidden'};
-        }
-
-    }
-    catch (error: any) {
-        res.status(error.status).send({error: error.message});
-    }
 
     },
 );

@@ -71,22 +71,21 @@ advancementController.get('/:id', validator.params(getAdvancementSchema), async 
 advancementController.get('/user/:id', validator.params(getAdvancementSchema), async (req: JWTRequest, res) => {
     const userId = Number(req.params.id);
     if (req.auth?.role === "admin") {
-    const user = await userRepository.findOneBy({ id: userId });
+        const user = await userRepository.findOneBy({ id: userId });
 
-    if (!user) {
-        res.status(404).send({error: 'User not found'});
-    }
-       else {
+        if (!user) {
+            const advancements = await advancementRepository.find({
+                where: {
+                    user: { id: userId }
+                },
+                relations: ['lesson'],
+            });
 
-        const advancements = await advancementRepository.find({
-            where: {
-                user: { id: userId }
-            },
-            relations: ['lesson'],
-        });
-
-        res.send(advancements);
-    }
+            res.send(advancements);
+        }
+        else {
+            res.status(404).send({error: 'User not found'});
+        }
     }
     else {
         if (userId === req.auth?.id) {
@@ -98,7 +97,7 @@ advancementController.get('/user/:id', validator.params(getAdvancementSchema), a
             });
             res.send(advancements);
         } else{
-          res.status(404).send({error: 'Forbidden'});
+            res.status(404).send({error: 'Forbidden'});
         }
     }
 
@@ -111,20 +110,23 @@ advancementController.post('/', validator.body(createAdvancementSchema), async (
         const lesson = await lessonRepository.findOneBy({id: req.body.lessonId});
 
 
-        if (!user || !lesson) {
+        if (user && lesson) {
+            if (req.auth?.role === 'admin' || user.id === req.auth?.id) {
+                const advancement = await advancementRepository.save({
+                    user,
+                    lesson,
+                    isDone: req.body.isDone,
+                });
+                res.send(advancement);
+            } else {
+                throw {status: 404, message: 'User or Lesson not found'};
+            }
+        }
+        else {
             throw {status: 404, message: 'User or Lesson not found'};
         }
 
-        if (req.auth?.role === 'admin' || user.id === req.auth?.id) {
-            const advancement = await advancementRepository.save({
-                user,
-                lesson,
-                isDone: req.body.isDone,
-            });
-            res.send(advancement);
-        } else {
-            throw {status: 404, message: 'User or Lesson not found'};
-        }
+
     } catch (error: any) {
         res.status(error.status ?? 500).send({error: error.message ?? 'Internal Server Error'});
     }
@@ -163,12 +165,12 @@ advancementController.delete('/:id', validator.params(getAdvancementSchema), asy
         if (req.auth?.role === 'admin') {
             const id = Number(req.params.id);
             const advancement = await advancementRepository.findOneBy({id});
-            if (!advancement) {
+            if (advancement) {
+                await advancementRepository.delete({id});
+                res.sendStatus(204);
+            } else {
                 throw {status: 404, message: 'Advancement not found'};
             }
-
-            await advancementRepository.delete({id});
-            res.sendStatus(204);
         } else {
             throw {status: 403, message: 'Forbidden'};
         }

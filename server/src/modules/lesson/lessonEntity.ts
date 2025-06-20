@@ -22,7 +22,6 @@ export class Lesson {
     @ManyToOne(() => Chapter, (chapter) => chapter.lessons)
     chapter: Chapter;
 
-    @OneToOne(() => Exercise, exercise => exercise.lesson, {nullable: true, onDelete: 'SET NULL'})
-    @JoinColumn()
+    @OneToOne(() => Exercise, exercise => exercise.lesson)
     exercise: Exercise;
 }

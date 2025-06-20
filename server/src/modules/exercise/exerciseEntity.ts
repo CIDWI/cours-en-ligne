@@ -1,4 +1,4 @@
-import {Column, Entity, OneToOne, PrimaryGeneratedColumn,} from "typeorm";
+import {Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn,} from "typeorm";
 import {Lesson} from "../lesson/lessonEntity";
 
 
@@ -15,7 +15,8 @@ export class Exercise {
     @Column("longtext")
     content: string;
 
-    @OneToOne(() => Lesson, (lesson) => lesson.exercise)
+    @OneToOne(() => Lesson, (lesson) => lesson.exercise,{nullable: true, onDelete: 'SET NULL'})
+    @JoinColumn()
     lesson: Lesson;
 
 }
