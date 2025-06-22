@@ -101,7 +101,7 @@ exerciseController.put('/:id',validator.params(getExerciseSchema),validator.body
 
                 if (exercise) {
                     if (req.body.title) {exercise.title = req.body.title}
-                    if (req.body.link) {exercise.imageLink = req.body.imageLink}
+                    if (req.body.imageLink) {exercise.imageLink = req.body.imageLink}
                     if (req.body.title) {exercise.content = req.body.content}
                     if (req.body.lessonId) {
                         if (lesson) {
