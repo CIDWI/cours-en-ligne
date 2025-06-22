@@ -1,4 +1,5 @@
 import express from 'express'
+import cors from 'cors'
 import {AppDataSource} from './dataSource'
 import {userController} from './modules/user/userController'
 import {authController} from './modules/auth/authController'
@@ -8,7 +9,15 @@ import {lessonController} from "./modules/lesson/lessonController";
 import {exerciseController} from "./modules/exercise/exerciseController";
 import {advancementController} from "./modules/advancement/advancementController";
 
+
+
 const app = express()
+
+
+app.use(cors({
+    origin: 'http://localhost:5173',
+    credentials: true
+}))
 
 app.use(express.json())
 app.get('/', (req, res) => {
