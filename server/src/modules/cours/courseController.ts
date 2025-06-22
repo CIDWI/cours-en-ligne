@@ -32,9 +32,15 @@ const updateCourseSchema = Joi.object({
     title: Joi.string().optional(),
 })
 
-//          GET ALL COURSES         //
 
 courseController.get('/', async (req: JWTRequest, res) => {
+        const courses = await courseRepository.find()
+    res.send(courses)
+})
+
+//          GET ALL COURSES WITH DETAIL        //
+
+courseController.get('/detail', async (req: JWTRequest, res) => {
 
     const courses = await courseRepository.find({
         relations: {
