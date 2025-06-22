@@ -42,7 +42,7 @@ const updateChapterSchema = Joi.object({
 
 chapterController.get('/', async (req: JWTRequest, res) => {
 
-    res.send(await chapterRepository.find({relations: ['lessons']}));
+    res.send(await chapterRepository.find({relations: ['lessons', 'course']}));
 
 });
 
