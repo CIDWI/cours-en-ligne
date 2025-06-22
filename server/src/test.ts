@@ -13,6 +13,7 @@ import {Course} from "./modules/cours/courseEntity";
 import {courseRepository} from "./modules/cours/courseRepository";
 import crypto from "crypto";
 import 'dotenv/config';
+import { exitCode } from "process";
 
 
 const test = async () => {
@@ -176,5 +177,6 @@ const test = async () => {
     advancement2.user = user1
     await advancementRepository.save(advancement2)
 
+    process.exit(0);
 };
 test();
