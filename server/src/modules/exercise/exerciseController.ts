@@ -2,129 +2,156 @@ import 'dotenv/config';
 import { Router, Request, Response } from 'express';
 import { createValidator } from 'express-joi-validation';
 import Joi from 'joi';
-import { expressjwt } from 'express-jwt';
+import {expressjwt, Request as JWTRequest} from 'express-jwt';
 import { exerciseRepository } from './exerciseRepository';
 import { lessonRepository } from '../lesson/lessonRepository';
 import { Exercise } from './exerciseEntity';
+import {courseController} from "../cours/courseController";
+import {chapterRepository} from "../chapter/chapterRepository";
 
 export const exerciseController = Router();
 const validator = createValidator();
 
 // Middleware JWT
 exerciseController.use(
-  expressjwt({
-    secret: process.env.JWT_SECRET!,
-    algorithms: ['HS256'],
-  })
+    expressjwt({
+        secret: process.env.JWT_SECRET!,
+        algorithms: ['HS256'],
+    })
 );
 
 // Joi schemas
 const getExerciseSchema = Joi.object({
-  id: Joi.number().required(),
+    id: Joi.number().required(),
 });
 
 const createExerciseSchema = Joi.object({
-  title: Joi.string().required(),
-  imageLink: Joi.string().uri().required(),
-  content: Joi.string().required(),
-  lessonId: Joi.number().required(), // Leçon requise maintenant
+    title: Joi.string().required(),
+    imageLink: Joi.string().uri().required(),
+    content: Joi.string().required(),
+    lessonId: Joi.number().required(),
 });
 
 const updateExerciseSchema = Joi.object({
-  title: Joi.string().optional(),
-  imageLink: Joi.string().uri().optional(),
-  content: Joi.string().optional(),
+    title: Joi.string().optional(),
+    imageLink: Joi.string().uri().optional(),
+    content: Joi.string().optional(),
+    lessonId: Joi.number().optional(),
 });
 
 
-// GET all exercises
-exerciseController.get('/', async (req: Request, res: Response): Promise<void> => {
-  const exercises = await exerciseRepository.find({ relations: ['lesson'] });
-  res.send(exercises);
+//            GET ALL EXERCISES            //
+exerciseController.get('/', async (req: Request, res: Response) => {
+    const exercises = await exerciseRepository.find({ relations: ['lesson'] });
+    res.send(exercises);
 });
 
-// GET exercise by ID
-exerciseController.get('/:id', validator.params(getExerciseSchema), async (req: Request, res: Response): Promise<void> => {
-  const id = Number(req.params.id);
-  const exercise = await exerciseRepository.findOne({ where: { id }, relations: ['lesson'] });
+//            GET EXERCISE BY ID          //ben
+exerciseController.get('/:id', validator.params(getExerciseSchema), async (req: Request, res: Response)  => {
+    const id = Number(req.params.id);
+    const exercise = await exerciseRepository.findOne({ where: { id }, relations: ['lesson'] });
 
-  if (!exercise) {
-    res.status(404).send({ error: 'Exercice non trouvé' });
-    return;
-  }
-
-  res.send(exercise);
-});
-
-// POST new exercise (admin only)
-exerciseController.post('/', validator.body(createExerciseSchema), async (req: Request, res: Response): Promise<void> => {
-  try {
-    const { title, imageLink, content, lessonId } = req.body;
-
-    const lesson = await lessonRepository.findOneBy({ id: lessonId });
-    if (!lesson) {
-      res.status(400).send({ error: 'Leçon introuvable' });
-      return;
+    if (exercise) {
+        res.send(exercise);
+    } else {
+        res.status(404).send({ error: 'Exercise Not Found' });
     }
 
-    const newExercise = new Exercise();
-    newExercise.title = title;
-    newExercise.imageLink = imageLink;
-    newExercise.content = content;
-    newExercise.lesson = lesson;
 
-    const savedExercise = await exerciseRepository.save(newExercise);
-    res.status(201).send(savedExercise);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({ error: "Erreur interne lors de la création de l’exercice" });
-  }
 });
 
-// PUT update exercise (admin only)
-exerciseController.put('/:id',
-  validator.params(getExerciseSchema),
-  validator.body(updateExerciseSchema),
-  async (req: Request, res: Response): Promise<void> => {
+//             POST NEW EXERCISE             //ben
+exerciseController.post('/', validator.body(createExerciseSchema), async (req: JWTRequest, res) => {
     try {
-      const id = Number(req.params.id);
-      const exercise = await exerciseRepository.findOneBy({ id });
+        if (req.auth?.role === 'admin') {
 
-      if (!exercise) {
-        res.status(404).send({ error: 'Exercice non trouvé' });
-        return;
-      }
 
-      const { title, imageLink, content } = req.body;
+            const lesson = await lessonRepository.findOneBy({ id: req.body.lessonId });
+            if (lesson) {
+                const newExercise = new Exercise();
+                newExercise.title = req.body.title;
+                newExercise.imageLink = req.body.imageLink;
+                newExercise.content = req.body.content;
+                newExercise.lesson = lesson;
 
-      if (title) exercise.title = title;
-      if (imageLink) exercise.imageLink = imageLink;
-      if (content) exercise.content = content;
+                const savedExercise = await exerciseRepository.save(newExercise);
+                res.send(savedExercise);
 
-      const updatedExercise = await exerciseRepository.save(exercise);
-      res.send(updatedExercise);
-    } catch (err) {
-      console.error(err);
-      res.status(500).send({ error: 'Erreur interne lors de la mise à jour de l’exercice' });
+            } else {
+                res.status(404).send({ error: 'Lesson Not Found' });
+            }
+
+
+        } else {
+            throw { status: 403, message: 'Forbidden' };
+        }
+
+    } catch (error:any) {
+        res.status(error.status ?? 500).send({error: error.message ?? "Internal Server Error"});
     }
-  }
+});
+
+//            PUT EXERCISE           //ben
+exerciseController.put('/:id',validator.params(getExerciseSchema),validator.body(updateExerciseSchema),async (req: JWTRequest, res ) => {
+        try {
+            if (req.auth?.role === 'admin') {
+                const id = Number(req.params.id);
+                const exercise = await exerciseRepository.findOneBy({ id });
+                const lesson = await lessonRepository.findOne({ where: { id: req.body.lessonId }});
+
+                if (exercise) {
+                    if (req.body.title) {exercise.title = req.body.title}
+                    if (req.body.imageLink) {exercise.imageLink = req.body.imageLink}
+                    if (req.body.title) {exercise.content = req.body.content}
+                    if (req.body.lessonId) {
+                        if (lesson) {
+                            exercise.lesson = lesson;
+                        }
+                        else {
+                            throw { status: 404, message: 'Lesson Not Found' };
+                        }
+                    }
+
+                    await exerciseRepository.save(exercise);
+                    res.send(exercise);
+
+                } else {
+                    throw { status: 404, message: 'Exercise Not Found' };
+                }
+
+
+
+
+            } else {
+                throw { status: 403, message: 'Forbidden' };
+            }
+
+        } catch (error:any) {
+            res.status(error.status ?? 500).send({error: error.message ?? "Internal Server Error"});
+        }
+    }
 );
 
-// DELETE exercise (admin only)
-exerciseController.delete('/:id', validator.params(getExerciseSchema), async (req: Request, res: Response): Promise<void> => {
-  try {
-    const id = Number(req.params.id);
-    const exercise = await exerciseRepository.findOneBy({ id });
+//         DELETE EXERCISE     //ben
+exerciseController.delete('/:id', validator.params(getExerciseSchema), async (req: JWTRequest, res )=> {
+    try {
+        if (req.auth?.role === 'admin') {
+            const id = Number(req.params.id);
+            const exercise = await exerciseRepository.findOneBy({ id });
 
-    if (!exercise) {
-      res.status(404).send({ error: 'Exercice non trouvé' });
-      return;
+            if (exercise) {
+                await exerciseRepository.delete(exercise);
+                res.sendStatus(204);
+            } else {
+                throw { status: 403, message: 'Exercise Not Found' };
+            }
+
+
+        } else {
+            throw { status: 403, message: 'Forbidden' };
+        }
+
+    } catch (error:any) {
+        res.status(error.status ?? 500).send({error: error.message ?? "Internal Server Error"});
     }
-
-    await exerciseRepository.remove(exercise);
-    res.sendStatus(204);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send({ error: 'Erreur interne lors de la suppression' });
-  }
 });

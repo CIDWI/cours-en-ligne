@@ -10,7 +10,9 @@ import {courseRepository} from "../cours/courseRepository";
 export const chapterController = Router();
 const validator = createValidator();
 
-// Middleware JWT
+
+//                  MIDDLEWARE JWT                  //
+
 chapterController.use(
     expressjwt({
         secret: process.env.JWT_SECRET!,
@@ -18,7 +20,9 @@ chapterController.use(
     }),
 );
 
-// Joi Schemas
+
+//                  JOI SCHEMAS                 //
+
 const createChapterSchema = Joi.object({
     title: Joi.string().required(),
     courseId: Joi.number().optional(),
@@ -33,14 +37,18 @@ const updateChapterSchema = Joi.object({
     courseId: Joi.number().optional(),
 });
 
-// GET all courses
+
+//                  GET ALL CHAPTERS                    //
+
 chapterController.get('/', async (req: JWTRequest, res) => {
 
     res.send(await chapterRepository.find({relations: ['lessons']}));
 
 });
 
-// GET one course by id
+
+//                  GET ONE COURSE BY ID                   //
+
 chapterController.get('/:id', validator.params(getChapterSchema), async (req: JWTRequest, res) => {
         const id = Number(req.params.id);
         const chapter = await chapterRepository.findOne({
@@ -51,38 +59,54 @@ chapterController.get('/:id', validator.params(getChapterSchema), async (req: JW
             res.send(chapter);
 
         } else {
-            res.status(404).send({error: 'Chapter not found'});
+            res.status(404).send({error: 'Chapter Not Found'});
         }
     },
 );
 
-// CREATE course (admin only)
+
+//                  CREATE CHAPTER                  //ben
+
 chapterController.post('/', validator.body(createChapterSchema), async (req: JWTRequest, res) => {
 
         try {
 
             if (req.auth?.role === 'admin') {
+
                 const course = await courseRepository.findOne({where: {id: req.body.courseId}, relations: ['chapters']});
                 let chapter;
+
                 if (req.body.courseId) {
+
                     if (course) {
+
                         chapter = await chapterRepository.save({
                             title: req.body.title,
                             course: course
                         });
-                    } else {
-                        throw {status: 400, message: 'Course not found'};
-                    }
-                } else {
-                    chapter = await chapterRepository.save({
-                        title: req.body.title,
-                    });
-                }
 
+                    } else {
+
+                        throw { status: 400, message: 'Course Not Found' };
+
+                    }
+
+                } else {
+
+                    chapter = await chapterRepository.save({
+
+                        title: req.body.title,
+
+                    });
+
+                }
 
                 res.send(chapter);
+
             } else {
-                throw {status: 403, message: 'Forbidden'};
+
+                throw { status: 403, message: 'Forbidden' };
+
             }
 
         } catch (error: any) {
@@ -91,72 +115,116 @@ chapterController.post('/', validator.body(createChapterSchema), async (req: JWT
     },
 );
 
-// UPDATE course (admin only)
+
+//                  UPDATE CHAPTER                  //ben
+
 chapterController.put('/:id', validator.params(getChapterSchema), validator.body(updateChapterSchema), async (req: JWTRequest, res) => {
-        try {
-            if (req.auth?.role === 'admin') {
-                const id = Number(req.params.id);
-                const chapter = await chapterRepository.findOneBy({id});
-                const course = await courseRepository.findOne({where: {id: req.body.courseId}, relations: ['chapters']});
 
-                if (chapter) {
-                    if (req.body.title) {
-                        if (req.body.courseId) {
-                            if (!course) {
-                                throw {status: 404, message: 'Course not found'};
-                            } else {
-                                chapter.course = course
-                            }
+    try {
+
+        if (req.auth?.role === 'admin') {
+
+            const id = Number(req.params.id);
+            const chapter = await chapterRepository.findOneBy({ id });
+            const course = await courseRepository.findOne({ where: { id: req.body.courseId }, relations: ['chapters'] });
+
+            if (chapter) {
+
+                if (req.body.title) {
+
+                    if (req.body.courseId) {
+
+                        if (course) {
+
+                            chapter.course = course
+
+                        } else {
+
+                            throw { status: 404, message: 'Course Not Found' };
+
                         }
-                        chapter.title = req.body.title;
 
-                        await chapterRepository.save(chapter);
-                        res.send(chapter);
-                    } else {
-                        throw {status: 400, message: 'Missing information to modify'};
                     }
 
-                } else {
-                    throw {status: 404, message: 'Chapter not found'};
-                }
-            } else {
-                throw {status: 403, message: 'Forbidden'};
-            }
-        } catch (error: any) {
-            res.status(error.status ?? 500).send({error: error.message ?? "Internal Server Error"});
-        }
-    },
-);
+                    chapter.title = req.body.title;
 
-// DELETE course (admin only)
+                    await chapterRepository.save(chapter);
+                    res.send(chapter);
+
+                } else {
+
+                    throw { status: 400, message: 'Missing Information To Modify' };
+
+                }
+
+            } else {
+
+                throw { status: 404, message: 'Chapter Not Found' };
+
+            }
+
+        } else {
+
+            throw { status: 403, message: 'Forbidden' };
+
+        }
+
+    } catch (error: any) {
+
+        res.status(error.status ?? 500).send({ error: error.message ?? "Internal Server Error" });
+
+    }
+
+});
+
+
+
+//                  DELETE CHAPTER BY ID                 //ben
+
 chapterController.delete('/:id', validator.params(getChapterSchema), async (req: JWTRequest, res) => {
-        try {
-            if (req.auth?.role === 'admin') {
-                const id = Number(req.params.id);
-                const chapter = await chapterRepository.findOne({
-                    where: {id},
-                    relations: ['lessons'],
-                });
-                if (chapter) {
-                    if (chapter.lessons.length === 0) {
-                        await chapterRepository.delete({id});
-                        res.sendStatus(204);
-                    } else {
-                        throw {status: 400, message: 'Cannot delete chapter with lessons'};
-                    }
+
+    try {
+
+        if (req.auth?.role === 'admin') {
+
+            const id = Number(req.params.id);
+            const chapter = await chapterRepository.findOne({
+
+                where: {id},
+                relations: ['lessons']
+
+            });
+
+            if (chapter) {
+
+                if (chapter.lessons.length === 0) {
+
+                    await chapterRepository.delete({id});
+                    res.sendStatus(204);
 
                 } else {
-                    throw {status: 400, message: 'Chapter not found'};
+
+                    throw { status: 400, message: 'Cannot Delete Chapter With Lessons' };
+
                 }
 
-
             } else {
-                throw {status: 403, message: 'Forbidden'};
+
+                throw { status: 400, message: 'Chapter Not Found' };
+
             }
 
-        } catch (error: any) {
-            res.status(error.status ?? 500).send({error: error.message ?? "Internal Server Error"});
+
+        } else {
+
+            throw { status: 403, message: 'Forbidden' };
+
         }
 
-    },
-);
+    } catch (error: any) {
+
+        res.status(error.status ?? 500).send({ error: error.message ?? "Internal Server Error" });
+
+    }
+
+});

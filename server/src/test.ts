@@ -1,4 +1,3 @@
-
 import {AppDataSource} from "./dataSource";
 import {User} from "./modules/user/userEntity";
 import {userRepository} from "./modules/user/userRepository";
