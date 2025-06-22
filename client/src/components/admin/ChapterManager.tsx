@@ -1,17 +1,8 @@
 import { useEffect, useState, FormEvent } from "react"
 import { useUser } from "../../contexts/UserContext"
 import { useNavigate } from "react-router-dom"
-
-interface Course {
-  id: number
-  title: string
-}
-
-interface Chapter {
-  id: number
-  title: string
-  course: Course
-}
+import { Course, Chapter } from "../../types/course"
+import "./Manager.css"
 
 const ChapterManager = () => {
   const { token, user } = useUser()
@@ -72,7 +63,7 @@ const ChapterManager = () => {
       })
 
       if (!res.ok) throw new Error("Erreur lors de la suppression")
-      setMessage("Chapitre supprimé")
+      setMessage(`Chapitre supprimé`)
       fetchChapters()
     } catch (error: unknown) {
       if (error instanceof Error) setError(error.message)
@@ -129,19 +120,19 @@ const ChapterManager = () => {
   }
 
   return (
-    <div>
+    <div className="manager-container">
       <h2>Gestion des chapitres</h2>
-      <form onSubmit={handleChapterSubmit}>
-        <input value={chapterTitle} onChange={(e) => setChapterTitle(e.target.value)} placeholder="Titre du chapitre" required />
-        <select value={selectedCourseId} onChange={(e) => setSelectedCourseId(Number(e.target.value))} required>
+      <form className="manager-form" onSubmit={handleChapterSubmit}>
+        <input className="manager-input" value={chapterTitle} onChange={(e) => setChapterTitle(e.target.value)} placeholder="Titre du chapitre" required />
+        <select className="manager-select" value={selectedCourseId} onChange={(e) => setSelectedCourseId(Number(e.target.value))} required>
           <option value="">Sélectionnez un cours</option>
           {courses.map((c) => (
             <option key={c.id} value={c.id}>{c.title}</option>
           ))}
         </select>
-        <button type="submit">{editingChapterId ? "Modifier" : "Créer"}</button>
+        <button className="manager-button" type="submit">{editingChapterId ? "Modifier" : "Créer"}</button>
         {editingChapterId && (
-          <button type="button" onClick={() => {
+          <button className="manager-button cancel-button" type="button" onClick={() => {
             setEditingChapterId(null)
             setChapterTitle("")
             setSelectedCourseId("")
@@ -149,7 +140,7 @@ const ChapterManager = () => {
         )}
       </form>
 
-      <table>
+      <table className="manager-table">
         <thead>
           <tr>
             <th>ID</th>
@@ -160,13 +151,13 @@ const ChapterManager = () => {
         </thead>
         <tbody>
           {chapters.map((c) => (
-            <tr key={c.id}>
-              <td>{c.id}</td>
-              <td>{c.title}</td>
-              <td>{c.course?.title}</td>
-              <td>
-                <button onClick={() => handleEditChapter(c)}>Modifier</button>
-                <button onClick={() => handleDeleteChapter(c.id)}>Supprimer</button>
+            <tr key={c.id} className="manager-row">
+              <td className="manager-cell">{c.id}</td>
+              <td className="manager-cell">{c.title}</td>
+              <td className="manager-cell">{c.course?.title}</td>
+              <td className="manager-cell manager-buttons">
+                <button className="manager-button edit-button" onClick={() => handleEditChapter(c)}>Modifier</button>
+                <button className="manager-button delete-button" onClick={() => handleDeleteChapter(c.id)}>Supprimer</button>
               </td>
             </tr>
           ))}

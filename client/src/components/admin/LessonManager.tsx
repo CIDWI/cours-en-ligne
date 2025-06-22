@@ -1,26 +1,8 @@
 import { useEffect, useState, FormEvent } from "react"
 import { useUser } from "../../contexts/UserContext"
 import { useNavigate } from "react-router-dom"
-
-interface Course {
-  id: number
-  title: string
-}
-
-interface Chapter {
-  id: number
-  title: string
-  course: Course
-}
-
-interface Lesson {
-  id: number
-  title: string
-  link: string
-  level: string
-  languages: string
-  chapter: Chapter
-}
+import { Chapter, Lesson } from "../../types/course"
+import "./Manager.css"
 
 const LessonManager = () => {
   const { token, user } = useUser()
@@ -150,22 +132,22 @@ const LessonManager = () => {
   }
 
   return (
-    <div>
+    <div className="manager-container">
       <h2>Gestion des leçons</h2>
-      <form onSubmit={handleLessonSubmit}>
-        <input value={lessonTitle} onChange={(e) => setLessonTitle(e.target.value)} placeholder="Titre de la leçon" required />
-        <input value={lessonLink} onChange={(e) => setLessonLink(e.target.value)} placeholder="Lien vidéo (http://...)" required />
-        <input value={lessonLevel} onChange={(e) => setLessonLevel(e.target.value)} placeholder="Niveau" required />
-        <input value={lessonLang} onChange={(e) => setLessonLang(e.target.value)} placeholder="Langage" required />
-        <select value={selectedChapterId} onChange={(e) => setSelectedChapterId(Number(e.target.value))} required>
+      <form className="manager-form" onSubmit={handleLessonSubmit}>
+        <input className="manager-input" value={lessonTitle} onChange={(e) => setLessonTitle(e.target.value)} placeholder="Titre de la leçon" required />
+        <input className="manager-input" value={lessonLink} onChange={(e) => setLessonLink(e.target.value)} placeholder="Lien vidéo (http://...)" required />
+        <input className="manager-input" value={lessonLevel} onChange={(e) => setLessonLevel(e.target.value)} placeholder="Niveau" required />
+        <input className="manager-input" value={lessonLang} onChange={(e) => setLessonLang(e.target.value)} placeholder="Langage" required />
+        <select className="manager-select" value={selectedChapterId} onChange={(e) => setSelectedChapterId(Number(e.target.value))} required>
           <option value="">Sélectionnez un chapitre</option>
           {chapters.map((ch) => (
             <option key={ch.id} value={ch.id}>{ch.title}</option>
           ))}
         </select>
-        <button type="submit">{editingLessonId ? "Modifier" : "Créer"}</button>
+        <button className="manager-button" type="submit">{editingLessonId ? "Modifier" : "Créer"}</button>
         {editingLessonId && (
-          <button type="button" onClick={() => {
+          <button className="manager-button cancel-button" type="button" onClick={() => {
             setEditingLessonId(null)
             setLessonTitle("")
             setLessonLink("")
@@ -176,7 +158,7 @@ const LessonManager = () => {
         )}
       </form>
 
-      <table>
+      <table className="manager-table">
         <thead>
           <tr>
             <th>ID</th>
@@ -189,15 +171,15 @@ const LessonManager = () => {
         </thead>
         <tbody>
           {lessons.map((l) => (
-            <tr key={l.id}>
-              <td>{l.id}</td>
-              <td>{l.title}</td>
-              <td>{l.chapter?.title}</td>
-              <td>{l.level}</td>
-              <td>{l.languages}</td>
-              <td>
-                <button onClick={() => handleEditLesson(l)}>Modifier</button>
-                <button onClick={() => handleDeleteLesson(l.id)}>Supprimer</button>
+            <tr key={l.id} className="manager-row">
+              <td className="manager-cell">{l.id}</td>
+              <td className="manager-cell">{l.title}</td>
+              <td className="manager-cell">{l.chapter?.title}</td>
+              <td className="manager-cell">{l.level}</td>
+              <td className="manager-cell">{l.languages}</td>
+              <td className="manager-cell manager-buttons">
+                <button className="manager-button edit-button" onClick={() => handleEditLesson(l)}>Modifier</button>
+                <button className="manager-button delete-button" onClick={() => handleDeleteLesson(l.id)}>Supprimer</button>
               </td>
             </tr>
           ))}

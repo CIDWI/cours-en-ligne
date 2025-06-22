@@ -1,17 +1,20 @@
 import { useState, useEffect, FormEvent } from "react"
 import { useNavigate } from "react-router-dom"
 import { useUser } from "../../contexts/UserContext"
+import { jwtDecode } from "jwt-decode"
 import Logo from "../../assets/Logo_cidwi.png"
 import "./Login.css"
 
 interface LoginResponse {
   token?: string
-  user?: {
-    id: number
-    login: string
-    role: string
-  }
   message?: string
+}
+
+interface DecodedToken {
+  id: number
+  role: string
+  exp: number
+  iat: number
 }
 
 const Login = () => {
@@ -58,10 +61,12 @@ const Login = () => {
       }
 
       if (data.token) {
-        const user = data.user ?? {
-          id: 0,
+        const decoded = jwtDecode<DecodedToken>(data.token)
+
+        const user = {
+          id: decoded.id,
           login: login,
-          role: "user",
+          role: decoded.role,
         }
 
         setUserFromLogin(user, data.token)

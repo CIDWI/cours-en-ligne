@@ -2,10 +2,8 @@ import { useEffect, useState, FormEvent } from "react"
 import { useUser } from "../../contexts/UserContext"
 import { useNavigate } from "react-router-dom"
 
-interface Course {
-  id: number
-  title: string
-}
+import { Course } from "../../types/course"
+import "./Manager.css"
 
 const CourseManager = () => {
   const { token, user } = useUser()
@@ -50,7 +48,7 @@ const CourseManager = () => {
       })
 
       if (!res.ok) throw new Error("Erreur lors de la suppression")
-      setMessage("Cours supprimé")
+      setMessage(`Cours supprimé`)
       fetchCourses()
     } catch (error: unknown) {
       if (error instanceof Error) setError(error.message)
@@ -102,20 +100,20 @@ const CourseManager = () => {
   }
 
   return (
-    <div>
+    <div className="manager-container">
       <h2>Gestion des cours</h2>
-      <form onSubmit={handleCourseSubmit}>
-        <input value={courseTitle} onChange={(e) => setCourseTitle(e.target.value)} placeholder="Titre du cours" required />
-        <button type="submit">{editingCourseId ? "Modifier" : "Créer"}</button>
+      <form className="manager-form" onSubmit={handleCourseSubmit}>
+        <input className="manager-input" value={courseTitle} onChange={(e) => setCourseTitle(e.target.value)} placeholder="Titre du cours" required />
+        <button className="manager-button" type="submit">{editingCourseId ? "Modifier" : "Créer"}</button>
         {editingCourseId && (
-          <button type="button" onClick={() => {
+          <button className="manager-button cancel-button" type="button" onClick={() => {
             setEditingCourseId(null)
             setCourseTitle("")
           }}>Annuler</button>
         )}
       </form>
 
-      <table>
+      <table className="manager-table">
         <thead>
           <tr>
             <th>ID</th>
@@ -125,12 +123,12 @@ const CourseManager = () => {
         </thead>
         <tbody>
           {courses.map((c) => (
-            <tr key={c.id}>
-              <td>{c.id}</td>
-              <td>{c.title}</td>
-              <td>
-                <button onClick={() => handleEditCourse(c)}>Modifier</button>
-                <button onClick={() => handleDeleteCourse(c.id)}>Supprimer</button>
+            <tr key={c.id} className="manager-row">
+              <td className="manager-cell">{c.id}</td>
+              <td className="manager-cell">{c.title}</td>
+              <td className="manager-cell manager-buttons">
+                <button className="manager-button edit-button" onClick={() => handleEditCourse(c)}>Modifier</button>
+                <button className="manager-button delete-button" onClick={() => handleDeleteCourse(c.id)}>Supprimer</button>
               </td>
             </tr>
           ))}

@@ -1,31 +1,9 @@
 import { useEffect, useState, FormEvent } from "react"
 import { useUser } from "../../contexts/UserContext"
 import { useNavigate } from "react-router-dom"
+import { Exercise, Lesson } from "../../types/course"
 
-interface Course {
-  id: number
-  title: string
-}
-
-interface Chapter {
-  id: number
-  title: string
-  course: Course
-}
-
-interface Lesson {
-  id: number
-  title: string
-  chapter: Chapter
-}
-
-interface Exercise {
-  id: number
-  title: string
-  content: string
-  imageLink: string
-  lesson: Lesson
-}
+import "./Manager.css" // Ajout de l'import CSS
 
 const ExerciseManager = () => {
   const { token, user } = useUser()
@@ -151,9 +129,9 @@ const ExerciseManager = () => {
   }
 
   return (
-    <div>
+    <div className="manager-container">
       <h2>Gestion des exercices</h2>
-      <form onSubmit={handleExerciseSubmit}>
+      <form onSubmit={handleExerciseSubmit} className="manager-form">
         <input value={exerciseTitle} onChange={(e) => setExerciseTitle(e.target.value)} placeholder="Titre de l'exercice" required />
         <input value={exerciseContent} onChange={(e) => setExerciseContent(e.target.value)} placeholder="Consigne" required />
         <input value={exerciseImageLink} onChange={(e) => setExerciseImageLink(e.target.value)} placeholder="Lien de l'image" required />
@@ -175,7 +153,7 @@ const ExerciseManager = () => {
         )}
       </form>
 
-      <table>
+      <table className="manager-table">
         <thead>
           <tr>
             <th>ID</th>
@@ -186,13 +164,13 @@ const ExerciseManager = () => {
         </thead>
         <tbody>
           {exercises.map((e) => (
-            <tr key={e.id}>
-              <td>{e.id}</td>
-              <td>{e.title}</td>
-              <td>{e.lesson?.title}</td>
-              <td>
-                <button onClick={() => handleEditExercise(e)}>Modifier</button>
-                <button onClick={() => handleDeleteExercise(e.id)}>Supprimer</button>
+            <tr key={e.id} className="manager-row">
+              <td className="manager-cell">{e.id}</td>
+              <td className="manager-cell">{e.title}</td>
+              <td className="manager-cell">{e.lesson?.title}</td>
+              <td className="manager-cell manager-buttons">
+                <button className="manager-button edit-button" onClick={() => handleEditExercise(e)}>Modifier</button>
+                <button className="manager-button delete-button" onClick={() => handleDeleteExercise(e.id)}>Supprimer</button>
               </td>
             </tr>
           ))}
