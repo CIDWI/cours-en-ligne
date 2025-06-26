@@ -1,3 +1,11 @@
+export interface Exercise {
+  id: number
+  title: string
+  content: string
+  imageLink: string
+  lesson: Lesson
+}
+
 export interface Lesson {
   id: number
   title: string
@@ -6,6 +14,7 @@ export interface Lesson {
   languages: string
   chapter: Chapter
   isDone: boolean
+  exercises?: Exercise[]
 }
 
 export interface Chapter {
@@ -22,12 +31,4 @@ export interface Course {
   id: number
   title: string
   chapters: Chapter[]
-}
-
-interface Exercise {
-  id: number
-  title: string
-  content: string
-  imageLink: string
-  lesson: Lesson
 }

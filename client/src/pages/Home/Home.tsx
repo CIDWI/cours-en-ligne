@@ -13,7 +13,7 @@ function Home() {
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/course/with-lessons/${user?.id}`, {
+        const response = await fetch(`http://localhost:3000/course/detail`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

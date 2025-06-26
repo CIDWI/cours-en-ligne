@@ -9,6 +9,22 @@
   transition: background-color 0.3s ease;
 }
 
+.home-button{
+  width: 100px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 2rem;
+  background-color: inherit;
+  border: none;
+  cursor: pointer;
+}
+
+
+.home-button img{
+  width: 20%;
+}
+
 .admin-dashboard form {
   display: flex;
   flex-direction: column;

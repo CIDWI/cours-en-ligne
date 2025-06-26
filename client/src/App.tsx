@@ -5,6 +5,7 @@ import PrivateRoute from './routes/PrivateRoute'
 import { ThemeProvider } from './contexts/ThemeContext'
 import { UserProvider } from './contexts/UserContext'
 import AdminDashboard from './pages/AdminDashboard/AdminDashboard'
+import ExercisePage from './pages/ExercicePage/ExercisePage'
 
 export const App = () => {
 
@@ -22,6 +23,7 @@ export const App = () => {
                 </PrivateRoute>
               }
             />
+            <Route path="/exercise/:id" element={<ExercisePage />} />
             <Route
               path="/admin"
               element={
