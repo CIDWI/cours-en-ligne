@@ -45,7 +45,7 @@ authController.post(
             }
 
             const token = jwt.sign(
-                { id: user.id, role: user.role },
+                { id: user.id, role: user.role, firstName: user.firstName, lastName: user.lastName },
                 process.env.JWT_SECRET!,
                 { algorithm: 'HS256', expiresIn: '24h' }
             );
