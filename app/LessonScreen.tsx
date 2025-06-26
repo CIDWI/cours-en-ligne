@@ -372,7 +372,7 @@ export default function LessonScreen() {
 
       try {
         const response = await fetch(
-        //   `http://192.168.1.17:3000/chapter/${chapterId}`,
+          // `http://192.168.1.17:3000/chapter/${chapterId}`,
          `http://192.168.1.85:3000/chapter/${chapterId}`,
           {
             headers: {
