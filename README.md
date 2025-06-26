@@ -80,7 +80,7 @@ Accueil
 Ne pas oublier de lancer l'api du back
 ---
 Ne pas oubliez que quand vous lancez le projet veuillez bien mettre votre adresse ip :
-'http://x.x.x.x:x/course'
+'http://x.x.x.x:x/xx'
 ---
 Si cela ne fonctionne pas, n'hésitez pas à vous re-logger
 
