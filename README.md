@@ -83,4 +83,6 @@ Ne pas oubliez que quand vous lancez le projet veuillez bien mettre votre adress
 'http://x.x.x.x:x/xx'
 ---
 Si cela ne fonctionne pas, n'hésitez pas à vous re-logger
+---
+BONNE SOIRÉE ! 
 
