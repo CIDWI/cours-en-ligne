@@ -1,13 +1,16 @@
-import { useState } from "react"
-import { Lesson } from "../../../types/course"
 import { useNavigate } from "react-router-dom"
+import { Lesson } from "../../../types/course"
 import { useUser } from "../../../contexts/UserContext"
-import "./HomeLessons.css"
+import "./LessonItem.css"
 
-const LessonItem: React.FC<{ lesson: Lesson }> = ({ lesson }) => {
+interface LessonItemProps {
+  lesson: Lesson
+  isCompleted: boolean
+}
+
+const LessonItem: React.FC<LessonItemProps> = ({ lesson, isCompleted }) => {
   const navigate = useNavigate()
   const { user, token } = useUser()
-  const [isCompleted, setIsCompleted] = useState(lesson.isDone) // 👈 local override
 
   const handleClick = async () => {
     if (!lesson.exercise?.id || !user || !token) return
@@ -25,34 +28,34 @@ const LessonItem: React.FC<{ lesson: Lesson }> = ({ lesson }) => {
           isDone: true,
         }),
       })
-
-      setIsCompleted(true) // 👈 forcer la mise à jour locale
     } catch (error) {
-      console.warn("Erreur ignorée :", error)
+      console.warn("Erreur :", error)
     } finally {
       navigate(`/exercise/${lesson.exercise.id}`)
     }
   }
 
-  const getButtonLabel = () => {
-    if (!lesson.exercise) return "Pas d'exercice"
-    return isCompleted ? "Terminé" : "Start"
-  }
+  const label = !lesson.exercise
+    ? "Pas d'exercice"
+    : isCompleted
+    ? "Terminé"
+    : "Start"
 
-  const getButtonClass = () => {
-    if (!lesson.exercise) return "lesson-button-disabled"
-    return isCompleted ? "lesson-done-button" : "lesson-button-pending"
-  }
+  const btnClass = !lesson.exercise
+    ? "lesson-button-disabled"
+    : isCompleted
+    ? "lesson-done-button"
+    : "lesson-button-pending"
 
   return (
     <div className="lesson-container">
       <span>{lesson.title}</span>
       <button
-        className={`lesson-button ${getButtonClass()}`}
+        className={`lesson-button ${btnClass}`}
         onClick={handleClick}
         disabled={!lesson.exercise}
       >
-        {getButtonLabel()}
+        {label}
       </button>
     </div>
   )

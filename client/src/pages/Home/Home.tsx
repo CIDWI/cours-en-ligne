@@ -1,51 +1,49 @@
 import { useEffect, useState } from "react"
-import { useLocation } from "react-router-dom"
 import Page from "../../layout/Page/Page"
 import HomeChapters from "../../components/Home/HomeChapters/HomeChapters"
 import { useUser } from "../../contexts/UserContext"
-import { Course, Chapter } from "../../types/course"
+import { Course} from "../../types/course"
+import { Advancement } from "../../types/advancement"
 import "./Home.css"
 
-const Home = () => {
-  const { user, token } = useUser()
-  const location = useLocation()
+function Home() {
   const [courses, setCourses] = useState<Course[]>([])
+  const [advancements, setAdvancements] = useState<Advancement[]>([])
   const [loading, setLoading] = useState(true)
+  const { user, token } = useUser()
 
   useEffect(() => {
-    const fetchCourses = async () => {
+    const fetchData = async () => {
       try {
-        setLoading(true)
+        const [courseRes, advRes] = await Promise.all([
+          fetch("http://localhost:3000/course/detail", {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          fetch(`http://localhost:3000/advancement`, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+        ])
 
-        const response = await fetch("http://localhost:3000/course/detail", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
+        const [courseData, advData] = await Promise.all([
+          courseRes.json(),
+          advRes.json(),
+        ])
 
-        if (!response.ok) throw new Error("Erreur lors du chargement des cours")
-        const data: Course[] = await response.json()
-        setCourses(data)
+        setCourses(courseData)
+        setAdvancements(advData)
       } catch (error) {
         console.error("Erreur de chargement :", error)
-        setCourses([])
       } finally {
         setLoading(false)
       }
     }
 
-    if (user && token) {
-      fetchCourses()
-    }
-  }, [user, token, location.pathname]) // 👈 re-fetch à chaque navigation
+    if (user && token) fetchData()
+  }, [user, token])
 
-  if (!user || !token) {
-    return (
-      <Page>
-        <p>Chargement de l'utilisateur...</p>
-      </Page>
-    )
-  }
+  const completedLessonIds = advancements
+    .filter((a) => a.isDone)
+    .map((a) => a.lesson.id)
 
   return (
     <Page>
@@ -53,15 +51,17 @@ const Home = () => {
         <h1>Cours</h1>
         <hr />
         {loading ? (
-          <p>Chargement des cours...</p>
-        ) : courses.length === 0 ? (
-          <p>Aucun cours disponible.</p>
+          <p>Chargement…</p>
         ) : (
           courses.map((course) => (
-            <div key={course.id} className="course-block">
+            <div key={course.id}>
               <h2>{course.title}</h2>
-              {course.chapters.map((chapter: Chapter) => (
-                <HomeChapters key={chapter.id} chapter={chapter} />
+              {course.chapters.map((chapter) => (
+                <HomeChapters
+                  key={chapter.id}
+                  chapter={chapter}
+                  completedLessonIds={completedLessonIds}
+                />
               ))}
             </div>
           ))

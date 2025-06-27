@@ -16,6 +16,7 @@ export interface Lesson {
   isDone: boolean
   exercise?: Exercise
 }
+
 export interface Chapter {
   id: number
   title: string

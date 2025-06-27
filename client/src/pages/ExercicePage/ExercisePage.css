@@ -1,11 +1,14 @@
+/* PAGE CONTAINER */
 .exercise-page {
   background-color: #e3ebee;
   height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
+/* WRAPPER CONTENEUR PRINCIPAL */
 .exercise-wrapper {
   display: flex;
   height: 80vh;
@@ -16,13 +19,13 @@
   overflow: hidden;
 }
 
-/* IDE */
+/* ÉDITEUR (IDE) */
 .editor-pane {
   flex: 2;
   background-color: #1e1e1e;
 }
 
-/* EXERCISE CONTENT */
+/* CONTENU DE DROITE */
 .exercise-content {
   flex: 1;
   display: flex;
@@ -30,21 +33,67 @@
   height: 100%;
   background-color: #f9f9f9;
   border-left: 1px solid #ddd;
-  padding: 20px;
+}
+
+/* TABS */
+.tabs {
+  display: flex;
+  height: 50px;
+  border-bottom: 1px solid #ccc;
+}
+
+.tabs button {
+  flex: 1;
+  border: none;
+  background: #f0f0f0;
+  padding: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.tabs button:hover {
+  background: #e0e0e0;
+}
+
+.tabs button.active {
+  background-color: #ffffff;
+  border-bottom: 3px solid #5b2be0;
+}
+
+/* CONTENU DE CHAQUE TAB */
+.tab-content {
+  flex: 1;
   overflow-y: auto;
+  padding: 20px;
 }
 
-.exercise-content h2 {
-  margin-top: 0;
+.tab-content h2 {
+  margin: 2rem 0 1rem;
+  font-size: 2rem;
+  text-align: center;
 }
 
-.exercise-content img {
+.tab-content p {
+  font-size: 1.1rem;
+  margin: 1rem 0;
+  line-height: 1.5;
+}
+
+.tab-content iframe {
+  width: 100%;
+  height: 250px;
+  border: none;
+  margin-top: 1rem;
+}
+
+.tab-content img {
   margin-top: 20px;
   max-width: 100%;
   border-radius: 8px;
 }
 
-/* RETURN BUTTON */
+/* BOUTON DE RETOUR FIXÉ */
 .return-button {
   position: fixed;
   top: 20px;
@@ -65,19 +114,25 @@
   background-color: #431bb0;
 }
 
-/* RESPONSIVE */
-@media (max-width: 768px) {
-  .exercise-wrapper {
-    flex-direction: column;
-    height: auto;
-    width: 95vw;
-  }
-
-  .editor-pane {
-    height: 300px;
-  }
-
-  .exercise-content {
-    height: auto;
-  }
+/* ERREUR */
+.error {
+  color: red;
+  text-align: center;
+  margin-top: 2rem;
 }
+
+.next-button {
+  background-color: #5b2be0;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.next-button:hover {
+  background-color: #431bb0;
+}
+

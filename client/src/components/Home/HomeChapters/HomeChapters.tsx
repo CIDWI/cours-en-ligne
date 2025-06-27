@@ -1,14 +1,22 @@
-import React from 'react'
-import LessonItem from '../HomeLessons/HomeLessons'
-import { Chapter } from '../../../types/course'
-import './HomeChapters.css'
+import LessonItem from "../LessonItem/LessonItem"
+import { Chapter } from "../../../types/course"
+import "./HomeChapters.css"
 
-const HomeChapters: React.FC<{ chapter: Chapter }> = ({ chapter }) => (
-  <div className='chapter-container'>
+interface Props {
+  chapter: Chapter
+  completedLessonIds: number[]
+}
+
+const HomeChapters: React.FC<Props> = ({ chapter, completedLessonIds }) => (
+  <div className="chapter-container">
     <h3>{chapter.title}</h3>
-    <div className='chapter-button-container'>
+    <div className="chapter-button-container">
       {chapter.lessons.map((lesson) => (
-        <LessonItem key={lesson.id} lesson={lesson} />
+        <LessonItem
+          key={lesson.id}
+          lesson={lesson}
+          isCompleted={completedLessonIds.includes(lesson.id)}
+        />
       ))}
     </div>
   </div>

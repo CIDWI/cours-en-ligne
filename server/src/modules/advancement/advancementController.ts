@@ -102,6 +102,7 @@ advancementController.get('/user/:id', validator.params(getAdvancementSchema), a
     }
 
 });
+
 //POST new advancement (admin only)
 advancementController.post('/', validator.body(createAdvancementSchema), async (req: JWTRequest, res) => {
     try {
