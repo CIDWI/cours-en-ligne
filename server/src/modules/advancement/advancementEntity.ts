@@ -19,7 +19,7 @@ export class Advancement {
   id: number;
   @Column()
   isDone: boolean;
-  @OneToOne(() => Lesson)
+  @ManyToOne(() => Lesson, (lesson) => lesson.advancements)
   @JoinColumn()
   lesson: Lesson;
   @ManyToOne(() => User, (user) => user.advancements)
