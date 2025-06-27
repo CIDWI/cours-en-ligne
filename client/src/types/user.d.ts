@@ -1,8 +1,7 @@
-export interface Advancement {
+export interface User {
   id: number
-  isDone: boolean | number
-  lesson: {
-    id: number
-    title: string
-  }
+  login: string
+  firstName: string
+  lastName: string
+  role: string
 }
