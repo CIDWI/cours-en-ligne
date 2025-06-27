@@ -9,6 +9,8 @@ Docker Desktop installé et lancé
 
 npm installé (fourni avec Node.js)
 
+Ajouter le fichier .env fourni par mail (Le .env est dans .gitignore)
+
 ## 🚀 Étapes d'installation
 
 ---
@@ -17,6 +19,7 @@ aller sur le dossier Server puis éxecuter cette commande
 ```bash
    cd server
    npm install
+   npm i --save-dev @types/cors
 ```
 ---
 ## 2. Démarrer les services Docker
