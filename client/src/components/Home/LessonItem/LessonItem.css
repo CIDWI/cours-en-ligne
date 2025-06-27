@@ -1,0 +1,46 @@
+.lesson-container{
+	border: 1px rgba(0, 0, 0, 0.144)  solid;
+	display: flex;
+	justify-content: space-between;
+	padding: 1rem 1.5rem 1rem 3rem;
+	font-size: 1.rem;
+	align-items: center;
+}
+
+.lesson-container span{
+	font-weight: 500;
+}
+
+.lesson-button{
+	padding: 0.5rem 1rem;
+	background-color: var(--purple-color);
+	color: whitesmoke;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+/* BOUTON "Start" */
+.lesson-button-pending {
+  background-color: var(--purple-color);
+}
+
+.lesson-button-pending:hover {
+  background-color: #4a1ec0;
+}
+
+/* BOUTON "Terminé" */
+.lesson-done-button {
+  background-color: #28a745;
+}
+
+.lesson-done-button:hover {
+  background-color: #218838;
+}
+
+/* BOUTON sans exercice */
+.lesson-button-disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
