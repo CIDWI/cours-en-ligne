@@ -1,6 +1,7 @@
-import {Column, Entity, JoinColumn, ManyToOne, OneToOne, PrimaryGeneratedColumn,} from "typeorm";
+import {Column, Entity, JoinColumn, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn,} from "typeorm";
 import {Chapter} from "../chapter/chapterEntity";
 import {Exercise} from "../exercise/exerciseEntity";
+import {Advancement} from "../advancement/advancementEntity";
 
 @Entity()
 export class Lesson {
@@ -21,6 +22,8 @@ export class Lesson {
 
     @ManyToOne(() => Chapter, (chapter) => chapter.lessons)
     chapter: Chapter;
+    @OneToMany(() => Advancement, (advancement) => advancement.lesson)
+    advancements: Advancement[];
 
     @OneToOne(() => Exercise, exercise => exercise.lesson)
     exercise: Exercise;

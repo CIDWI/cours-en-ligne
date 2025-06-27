@@ -175,6 +175,7 @@ const test = async () => {
     advancement2.lesson = lesson2
     advancement2.user = user1
     await advancementRepository.save(advancement2)
+    process.exit(0)
 
 };
 test();
