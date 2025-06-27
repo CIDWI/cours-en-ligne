@@ -1,0 +1,18 @@
+.chapter-container{
+	padding: 2rem 0;
+}
+
+h3{
+	font-size: 1.6rem;
+	font-family: "Roboto", serif;
+	letter-spacing: normal;
+	font-weight: 500;
+}
+
+.chapter-button-container{
+	margin: 1rem;
+	border-left: 3px var(--purple-color) solid;
+	display: flex;
+	flex-direction: column;
+	gap: 1rem;
+}

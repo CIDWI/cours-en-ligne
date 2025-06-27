@@ -1,0 +1,111 @@
+/* Manager.css */
+
+.manager-container {
+  padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+  font-family: Arial, sans-serif;
+}
+
+.manager-container h2 {
+  text-align: center;
+  margin-bottom: 3rem;
+  font-size: 2rem;
+}
+
+.manager-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 2rem;
+}
+
+.manager-table th,
+.manager-table td {
+  border: 1px solid #ddd;
+  padding: 0.75rem;
+  text-align: center;
+}
+
+.manager-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+}
+
+.status-cell {
+  text-align: center;
+  font-weight: bold;
+}
+
+.manager-container form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.manager-container form input,
+.manager-container form select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.manager-container form button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background-color: #5d1f7e;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.manager-container form button:hover {
+  background-color: #4a1864;
+}
+
+.manager-container ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.manager-container ul li {
+  margin-bottom: 0.75rem;
+}
+
+.manager-container ul li button {
+  margin-left: 0.5rem;
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.manager-buttons{
+  display: flex ;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.manager-buttons button{
+  border: none;
+  border-radius: 5px;
+  padding: 1rem;
+  cursor: pointer;
+}
+
+.manager-buttons .delete-button{
+  background-color: var(--delete-color);
+  color: var(--background-color);
+  font-weight: 700;
+}
+
+.error-message {
+  color: red;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.success-message, .error-message{
+  text-align: center;
+  font-size: 1.5rem;
+}

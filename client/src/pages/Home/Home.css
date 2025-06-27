@@ -1,0 +1,13 @@
+.homepage-container{
+    display: flex;
+    flex-direction: column;
+}
+
+.homepage-container h1{
+    font-size: 3rem;
+    margin-bottom: 2rem;
+}
+
+.homepage-container h2{
+    font-size: 2.5rem;
+}
