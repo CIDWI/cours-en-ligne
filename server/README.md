@@ -68,5 +68,6 @@ Il décrit l'ensemble des routes disponibles, les paramètres attendus, les rép
 Swagger facilite la compréhension et l’utilisation de l’API pour les développeurs front-end, les testeurs, ou toute personne souhaitant interagir avec la plateforme via des requêtes HTTP.
 
 ---
-[cour-en-ligne-API.yaml](../../cour-en-ligne-API.yaml)
+### google drive pour le téléchargement du swagger (.yaml)
+https://drive.google.com/file/d/1IKyW82k8sU7jGP1ZM3AhB1Xwojq-6LqC/view?usp=sharing
 
