@@ -14,9 +14,8 @@ export interface Lesson {
   languages: string
   chapter: Chapter
   isDone: boolean
-  exercises?: Exercise[]
+  exercise?: Exercise
 }
-
 export interface Chapter {
   id: number
   title: string

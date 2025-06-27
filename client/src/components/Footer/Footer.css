@@ -1,7 +1,7 @@
 footer{
     height: 100px;
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
     padding: 1rem 2rem;
     margin: 1px auto 5vh auto;

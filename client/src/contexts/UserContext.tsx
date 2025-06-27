@@ -1,14 +1,7 @@
 // UserContext.tsx (entier avec loadingUser ajouté)
 
 import { createContext, useContext, useEffect, useState } from "react"
-
-interface User {
-  id: number
-  login: string
-  role: string
-  firstName?: string
-  lastName?: string
-}
+import { User } from  "../types/user" 
 
 interface UserContextType {
   user: User | null

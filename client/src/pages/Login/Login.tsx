@@ -13,6 +13,8 @@ interface LoginResponse {
 interface DecodedToken {
   id: number
   role: string
+  firstName: string
+  lastName: string
   exp: number
   iat: number
 }
@@ -67,6 +69,8 @@ const Login = () => {
           id: decoded.id,
           login: login,
           role: decoded.role,
+          firstName: decoded.firstName,
+          lastName: decoded.lastName
         }
 
         setUserFromLogin(user, data.token)

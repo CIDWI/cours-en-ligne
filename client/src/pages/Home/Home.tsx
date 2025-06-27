@@ -1,19 +1,23 @@
 import { useEffect, useState } from "react"
+import { useLocation } from "react-router-dom"
 import Page from "../../layout/Page/Page"
 import HomeChapters from "../../components/Home/HomeChapters/HomeChapters"
 import { useUser } from "../../contexts/UserContext"
 import { Course, Chapter } from "../../types/course"
 import "./Home.css"
 
-function Home() {
+const Home = () => {
+  const { user, token } = useUser()
+  const location = useLocation()
   const [courses, setCourses] = useState<Course[]>([])
   const [loading, setLoading] = useState(true)
-  const { user, token } = useUser()
 
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/course/detail`, {
+        setLoading(true)
+
+        const response = await fetch("http://localhost:3000/course/detail", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -30,13 +34,17 @@ function Home() {
       }
     }
 
-    if (user?.id && token) {
+    if (user && token) {
       fetchCourses()
     }
-  }, [user, token])
+  }, [user, token, location.pathname]) // 👈 re-fetch à chaque navigation
 
-  if (!user) {
-    return <Page><p>Veuillez vous connecter pour accéder à vos cours.</p></Page>
+  if (!user || !token) {
+    return (
+      <Page>
+        <p>Chargement de l'utilisateur...</p>
+      </Page>
+    )
   }
 
   return (
@@ -50,7 +58,7 @@ function Home() {
           <p>Aucun cours disponible.</p>
         ) : (
           courses.map((course) => (
-            <div key={course.id}>
+            <div key={course.id} className="course-block">
               <h2>{course.title}</h2>
               {course.chapters.map((chapter: Chapter) => (
                 <HomeChapters key={chapter.id} chapter={chapter} />

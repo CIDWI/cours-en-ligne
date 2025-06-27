@@ -19,3 +19,28 @@
 	border-radius: 5px;
 	cursor: pointer;
 }
+
+/* BOUTON "Start" */
+.lesson-button-pending {
+  background-color: var(--purple-color);
+}
+
+.lesson-button-pending:hover {
+  background-color: #4a1ec0;
+}
+
+/* BOUTON "Terminé" */
+.lesson-done-button {
+  background-color: #28a745;
+}
+
+.lesson-done-button:hover {
+  background-color: #218838;
+}
+
+/* BOUTON sans exercice */
+.lesson-button-disabled {
+  background-color: #ccc;
+  color: #666;
+  cursor: not-allowed;
+}
